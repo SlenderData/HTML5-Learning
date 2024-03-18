@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang SC", Arial, sans-serif;
+        background-color: #D6E4E5;
+        color: #333;
+        padding: 20px;
+    }
+
+    button {
+        background-color: #D6E4E5;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: bold;
+        padding: 10px;
+    }
+
+    #calendar {
+        background-color: #EFF5F5;
+        border-radius: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        margin: auto;
+        overflow: hidden;
+        width: 300px;
+    }
+
+    #header {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        font-weight: bold;
+    }
+
+    #header span {
+        padding: 10px;
+    }
+
+    #body {
+        padding: 10px;
+    }
+
+    #weekdays div,
+    #days div {
+        width: 40px;
+        height: 40px;
+        float: left;
+        text-align: center;
+        line-height: 40px;
+    }
+
+    #weekdays div {
+        background-color: #497174;
+        color: #EFF5F5;
+        font-weight: bold;
+    }
+
+    #Sunday {
+        border-radius: 10px 0 0 10px;
+    }
+
+    #Saturday {
+        border-radius: 0 10px 10px 0;
+    }
+
+    #today {
+        background-color: #EB6440;
+        color: #EFF5F5;
+        border-radius: 10px;
+    }
+</style>
+<body>
+<div id="calendar">
+    <div id="header">
+        <button id="prevMonth">上个月</button>
+        <span id="currentYearMonth"></span>
+        <button id="nextMonth">下个月</button>
+    </div>
+    <div id="body">
+        <div id="weekdays">
+            <div id="Sunday">日</div>
+            <div>一</div>
+            <div>二</div>
+            <div>三</div>
+            <div>四</div>
+            <div>五</div>
+            <div id="Saturday">六</div>
+        </div>
+        <div id="days"></div>
+    </div>
+</div>
+</body>
+<script>
+    function fillCalendar(year, month) {
+        const daysElement = document.getElementById('days');
+        daysElement.innerHTML = ''; // 清空当前日历
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+        const today = new Date();
+
+        // 填充开始前的空白日期
+        for (let i = 0; i < firstDay.getDay(); i++) {
+            const emptyDiv = document.createElement('div');
+            daysElement.appendChild(emptyDiv);
+        }
+
+        // 填充当月所有日期
+        for (let day = 1; day <= lastDay.getDate(); day++) {
+            const dayDiv = document.createElement('div');
+            dayDiv.textContent = day;
+            if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+                dayDiv.id = 'today';
+            }
+            daysElement.appendChild(dayDiv);
+        }
+
+        document.getElementById('currentYearMonth').textContent = `${year}年${month + 1}月`;
+    }
+
+    const prevMonthButton = document.getElementById('prevMonth');
+    const nextMonthButton = document.getElementById('nextMonth');
+    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth();
+
+    prevMonthButton.onclick = () => {
+        currentMonth--;
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        }
+        fillCalendar(currentYear, currentMonth);
+    };
+
+    nextMonthButton.onclick = () => {
+        currentMonth++;
+        if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        }
+        fillCalendar(currentYear, currentMonth);
+    };
+
+    // 初始化日历
+    fillCalendar(currentYear, currentMonth);
+</script>
+</html>

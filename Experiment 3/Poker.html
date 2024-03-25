@@ -28,9 +28,12 @@
         margin: 5px;
         border-radius: 5px;
         border: thin dashed #333333;
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
+        overflow: hidden;
+    }
+
+    img {
+        width: 50px;
+        height: 75px;
     }
 
     .Container {
@@ -125,6 +128,122 @@
 </div>
 </body>
 <script>
+    // 初始化变量
+    let moves = 0; // 记录移动次数
+    const suits = ['clubs', 'diamonds', 'hearts', 'spades']; // 花色数组
+    let currentSuit = suits[Math.floor(Math.random() * suits.length)]; // 随机选择一个花色
+    let cards = []; // 存储随机顺序的牌
+    let inDropZone = []; // 存储放入B框的牌
 
+    // 初始化牌堆
+    function initDeck() {
+        cards = Array.from({length: 13}, (_, i) => i + 1);
+        cards = shuffle(cards); // 打乱牌的顺序
+        updateDeckDisplay();
+    }
+
+    // 打乱数组
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    // 更新牌堆显示
+    function updateDeckDisplay() {
+        for (let i = 0; i < cards.length; i++) {
+            let cardElement = document.querySelector(`#A${String(i + 1).padStart(2, '0')} > div > img`);
+            cardElement.src = 'img/card-back.webp'; // 显示牌背
+            cardElement.setAttribute('data-card-value', cards[i]);
+            cardElement.draggable = true;
+            cardElement.ondragstart = dragStart;
+        }
+    }
+
+    // 拖动开始
+    function dragStart(event) {
+        event.dataTransfer.setData("text", event.target.getAttribute('data-card-value'));
+        event.dataTransfer.setData("suit", currentSuit);
+    }
+
+    // 允许拖放
+    function allowDrop(event) {
+        event.preventDefault();
+    }
+
+    // 当牌被拖入B框
+    function drop(event) {
+        event.preventDefault();
+        if (inDropZone.length >= 5) return; // B框已满
+        let cardValue = event.dataTransfer.getData("text");
+        let suit = event.dataTransfer.getData("suit");
+        let cardImgPath = `img/${suit}/${cardValue.padStart(2, '0')}.jpg`;
+        addCardToDropZone(cardImgPath, cardValue);
+        moves++; // 增加步数
+        document.getElementById("stepCounts").textContent = `当前步数：${moves}`;
+        if (inDropZone.length === 5) {
+            checkSequence();
+        }
+    }
+
+    // 检查是否形成顺子
+    function checkSequence() {
+        let sortedCards = inDropZone.map(Number).sort((a, b) => a - b);
+        for (let i = 0; i < sortedCards.length - 1; i++) {
+            if (sortedCards[i] + 1 !== sortedCards[i + 1]) {
+                alert('不满足顺子要求，请调整！');
+                return;
+            }
+        }
+        alert('恭喜完成游戏！');
+    }
+
+    // 添加牌到B框
+    function addCardToDropZone(imgPath, cardValue) {
+        let emptySlot = document.querySelector('#dropZone td:empty > div > img');
+        if (emptySlot) {
+            emptySlot.src = imgPath;
+            inDropZone.push(cardValue);
+        }
+    }
+
+    // 绑定拖放事件
+    document.getElementById("dropZone").ondrop = drop;
+    document.getElementById("dropZone").ondragover = allowDrop;
+
+    // 绑定重新开始按钮
+    document.getElementById("reloadButton").addEventListener("click", () => {
+// 重置游戏状态
+        moves = 0;
+        document.getElementById("stepCounts").textContent = "当前步数：";
+        currentSuit = suits[Math.floor(Math.random() * suits.length)]; // 重新选择一个花色
+        inDropZone = []; // 清空B框的牌
+        initDeck(); // 重新初始化牌堆
+        resetDropZone(); // 清空并重置B框
+    });
+
+    // 清空并重置B框
+    function resetDropZone() {
+        let dropZoneImages = document.querySelectorAll("#dropZone img");
+        dropZoneImages.forEach(img => {
+            img.src = ""; // 清除图像
+            img.removeAttribute("data-card-value"); // 移除牌值属性
+        });
+    }
+
+    // 页面加载完成后初始化游戏
+    window.onload = () => {
+        initDeck();
+    };
+
+    // 实现拖动放回A框的逻辑（可选）
+    function returnToDeck(event) {
+// 你可以在这里添加逻辑，允许用户将牌从B框拖回A框
+// 注意更新牌的状态和显示，以及相关变量
+    }
+
+    // 注意：这个示例提供了基本的游戏逻辑框架。为了实现完整的游戏，可能还需要添加额外的逻辑，如更精细的错误处理、动画效果、或改善用户交互体验的功能。
 </script>
 </html>

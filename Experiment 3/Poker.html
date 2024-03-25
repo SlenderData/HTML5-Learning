@@ -5,13 +5,126 @@
     <title>Title</title>
 </head>
 <style>
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang SC", Arial, sans-serif;
+        background-color: #D6E4E5;
+        color: #333;
+        padding: 0;
+    }
+
+    button {
+        background-color: #D6E4E5;
+        border: none;
+        border-radius: 10px;
+        margin-left: 10px;
+        cursor: pointer;
+        font-weight: bold;
+        padding: 10px;
+    }
+
+    td > div {
+        width: 50px;
+        height: 75px;
+        margin: 5px;
+        border-radius: 5px;
+        border: thin dashed #333333;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    .Container {
+        background-color: #EFF5F5;
+        border-radius: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        margin: 20px auto;
+        padding: 20px;
+        overflow: hidden;
+        width: 900px;
+        text-align: center;
+    }
+
 </style>
 <body>
-<div class="musicPlayer">
-    <p>🎴读不懂我的猪肉脸🐷</p>
-    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=1386002700&auto=1&height=66"></iframe>
+<div class="Container">
+    <span id="stepCounts">当前步数：</span>
+    <button id="reloadButton">重新游戏</button>
+</div>
+<div id="deckContainer" class="Container">
+    <p>A框（牌堆）</p>
+    <table style="margin: auto;">
+        <tr>
+            <td id="A01">
+                <div><img/></div>
+            </td>
+            <td id="A02">
+                <div><img/></div>
+            </td>
+            <td id="A03">
+                <div><img/></div>
+            </td>
+            <td id="A04">
+                <div><img/></div>
+            </td>
+            <td id="A05">
+                <div><img/></div>
+            </td>
+            <td id="A06">
+                <div><img/></div>
+            </td>
+            <td id="A07">
+                <div><img/></div>
+            </td>
+            <td id="A08">
+                <div><img/></div>
+            </td>
+            <td id="A09">
+                <div><img/></div>
+            </td>
+            <td id="A10">
+                <div><img/></div>
+            </td>
+            <td id="A11">
+                <div><img/></div>
+            </td>
+            <td id="A12">
+                <div><img/></div>
+            </td>
+            <td id="A13">
+                <div><img/></div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="dropZone" class="Container">
+    <p>B框（目标区域）</p>
+    <table style="margin: auto;">
+        <tr>
+            <td id="B01">
+                <div><img/></div>
+            </td>
+            <td id="B02">
+                <div><img/></div>
+            </td>
+            <td id="B03">
+                <div><img/></div>
+            </td>
+            <td id="B04">
+                <div><img/></div>
+            </td>
+            <td id="B05">
+                <div><img/></div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="musicPlayer" class="Container">
+    <p>🃏读不懂我的猪肉脸🐷</p>
+    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=350 height=86
+            src="https://music.163.com/outchain/player?type=2&id=1386002700&auto=1&height=66"></iframe>
 </div>
 </body>
 <script>
+
 </script>
 </html>

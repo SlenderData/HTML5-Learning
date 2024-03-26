@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Poker</title>
 </head>
 <style>
     body {
@@ -25,7 +25,7 @@
     td > div {
         width: 50px;
         height: 75px;
-        margin: 5px;
+        margin: 2px;
         border-radius: 5px;
         border: thin dashed #333333;
         overflow: hidden;
@@ -43,58 +43,84 @@
         margin: 20px auto;
         padding: 20px;
         overflow: hidden;
-        width: 900px;
+        width: 800px;
         text-align: center;
     }
 
 </style>
 <body>
 <div class="Container">
-    <span id="stepCounts">当前步数：</span>
+    <span>当前步数：<span id="stepCounts">0</span></span>
     <button id="reloadButton">重新游戏</button>
 </div>
-<div id="deckContainer" class="Container">
+<div id="deckContainer" class="Container" ondrop="drop(event)" ondragover="allowDrop(event)">
     <p>A框（牌堆）</p>
     <table style="margin: auto;">
         <tr>
-            <td id="A01">
-                <div><img/></div>
+            <td>
+                <div id="A01">
+                    <img src="img/card-back.webp" id="drag01" draggable="true" ondragstart="drag(event)"/>
+                </div>
             </td>
-            <td id="A02">
-                <div><img/></div>
+            <td>
+                <div id="A02">
+                    <img src="img/card-back.webp" id="drag02" draggable="true" ondragstart="drag(event)"/>
+                </div>
             </td>
-            <td id="A03">
-                <div><img/></div>
+            <td>
+                <div id="A03">
+                    <img src="img/card-back.webp" id="drag03" draggable="true" ondragstart="drag(event)"/>
+                </div>
             </td>
-            <td id="A04">
-                <div><img/></div>
+            <td>
+                <div id="A04">
+                    <img src="img/card-back.webp" id="drag04" draggable="true" ondragstart="drag(event)"/>
+                </div>
             </td>
-            <td id="A05">
-                <div><img/></div>
+            <td>
+                <div id="A05">
+                    <img src="img/card-back.webp" id="drag05" draggable="true" ondragstart="drag(event)"/>
+                </div>
             </td>
-            <td id="A06">
-                <div><img/></div>
+            <td>
+                <div id="A06">
+                    <img src="img/card-back.webp" id="drag06" draggable="true" ondragstart="drag(event)"/>
+                </div>
             </td>
-            <td id="A07">
-                <div><img/></div>
+            <td>
+                <div id="A07">
+                    <img src="img/card-back.webp" id="drag07" draggable="true" ondragstart="drag(event)"/>
+                </div>
             </td>
-            <td id="A08">
-                <div><img/></div>
+            <td>
+                <div id="A08">
+                    <img src="img/card-back.webp" id="drag08" draggable="true" ondragstart="drag(event)"/>
+                </div>
             </td>
-            <td id="A09">
-                <div><img/></div>
+            <td>
+                <div id="A09">
+                    <img src="img/card-back.webp" id="drag09" draggable="true" ondragstart="drag(event)"/>
+                </div>
             </td>
-            <td id="A10">
-                <div><img/></div>
+            <td>
+                <div id="A10">
+                    <img src="img/card-back.webp" id="drag10" draggable="true" ondragstart="drag(event)"/>
+                </div>
             </td>
-            <td id="A11">
-                <div><img/></div>
+            <td>
+                <div id="A11">
+                    <img src="img/card-back.webp" id="drag11" draggable="true" ondragstart="drag(event)"/>
+                </div>
             </td>
-            <td id="A12">
-                <div><img/></div>
+            <td>
+                <div id="A12">
+                    <img src="img/card-back.webp" id="drag12" draggable="true" ondragstart="drag(event)"/>
+                </div>
             </td>
-            <td id="A13">
-                <div><img/></div>
+            <td>
+                <div id="A13">
+                    <img src="img/card-back.webp" id="drag13" draggable="true" ondragstart="drag(event)"/>
+                </div>
             </td>
         </tr>
     </table>
@@ -103,147 +129,131 @@
     <p>B框（目标区域）</p>
     <table style="margin: auto;">
         <tr>
-            <td id="B01">
-                <div><img/></div>
+            <td>
+                <div id="B01" ondrop="drop(event)" ondragover="allowDrop(event)">
+                </div>
             </td>
-            <td id="B02">
-                <div><img/></div>
+            <td>
+                <div id="B02" ondrop="drop(event)" ondragover="allowDrop(event)">
+                </div>
             </td>
-            <td id="B03">
-                <div><img/></div>
+            <td>
+                <div id="B03" ondrop="drop(event)" ondragover="allowDrop(event)">
+                </div>
             </td>
-            <td id="B04">
-                <div><img/></div>
+            <td>
+                <div id="B04" ondrop="drop(event)" ondragover="allowDrop(event)">
+                </div>
             </td>
-            <td id="B05">
-                <div><img/></div>
+            <td>
+                <div id="B05" ondrop="drop(event)" ondragover="allowDrop(event)">
+                </div>
             </td>
         </tr>
     </table>
 </div>
-<div id="musicPlayer" class="Container">
-    <p>🃏读不懂我的猪肉脸🐷</p>
-    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=350 height=86
-            src="https://music.163.com/outchain/player?type=2&id=1386002700&auto=1&height=66"></iframe>
-</div>
+<!--<div id="musicPlayer" class="Container">-->
+<!--    <p>🃏读不懂我的猪肉脸🐷</p>-->
+<!--    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=350 height=86-->
+<!--            src="https://music.163.com/outchain/player?type=2&id=1386002700&auto=1&height=66"></iframe>-->
+<!--</div>-->
 </body>
 <script>
-    // 初始化变量
-    let moves = 0; // 记录移动次数
-    const suits = ['clubs', 'diamonds', 'hearts', 'spades']; // 花色数组
-    let currentSuit = suits[Math.floor(Math.random() * suits.length)]; // 随机选择一个花色
-    let cards = []; // 存储随机顺序的牌
-    let inDropZone = []; // 存储放入B框的牌
+    document.addEventListener('DOMContentLoaded', function () {
+        initializeDeck();
+        document.getElementById("reloadButton").addEventListener('click', function () {
+            window.location.reload();
+        });
+    });
 
-    // 初始化牌堆
-    function initDeck() {
-        cards = Array.from({length: 13}, (_, i) => i + 1);
-        cards = shuffle(cards); // 打乱牌的顺序
-        updateDeckDisplay();
+    function createCard(suit, number) {
+        return {
+            suit: suit,
+            number: number,
+            get imgPath() {
+                return `img/${this.suit}/${this.number < 10 ? '0' + this.number : this.number}.jpg`;
+            },
+            get backImg() {
+                return "img/card-back.webp";
+            }
+        };
     }
 
-    // 打乱数组
+    function initializeDeck() {
+        const suits = ['clubs', 'diamonds', 'hearts', 'spades'];
+        const chosenSuit = suits[Math.floor(Math.random() * suits.length)];
+        let deck = Array.from({length: 13}, (v, k) => createCard(chosenSuit, k + 1));
+        deck = shuffle(deck);
+
+        deck.forEach((card, index) => {
+            const cardElement = document.getElementById(`drag${index + 1}`);
+            cardElement.dataset.suit = card.suit;
+            cardElement.dataset.number = card.number;
+            cardElement.dataset.imgPath = card.imgPath;
+            cardElement.src = card.backImg; // Initial display is card back
+        });
+    }
+
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
-            let j = Math.floor(Math.random() * (i + 1));
+            const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
         }
         return array;
     }
 
-    // 更新牌堆显示
-    function updateDeckDisplay() {
-        for (let i = 0; i < cards.length; i++) {
-            let cardElement = document.querySelector(`#A${String(i + 1).padStart(2, '0')} > div > img`);
-            cardElement.src = 'img/card-back.webp'; // 显示牌背
-            cardElement.setAttribute('data-card-value', cards[i]);
-            cardElement.draggable = true;
-            cardElement.ondragstart = dragStart;
-        }
+    function drag(event) {
+        event.dataTransfer.setData("text", event.target.id);
     }
 
-    // 拖动开始
-    function dragStart(event) {
-        event.dataTransfer.setData("text", event.target.getAttribute('data-card-value'));
-        event.dataTransfer.setData("suit", currentSuit);
-    }
-
-    // 允许拖放
     function allowDrop(event) {
         event.preventDefault();
     }
 
-    // 当牌被拖入B框
     function drop(event) {
         event.preventDefault();
-        if (inDropZone.length >= 5) return; // B框已满
-        let cardValue = event.dataTransfer.getData("text");
-        let suit = event.dataTransfer.getData("suit");
-        let cardImgPath = `img/${suit}/${cardValue.padStart(2, '0')}.jpg`;
-        addCardToDropZone(cardImgPath, cardValue);
-        moves++; // 增加步数
-        document.getElementById("stepCounts").textContent = `当前步数：${moves}`;
-        if (inDropZone.length === 5) {
-            checkSequence();
+        var data = event.dataTransfer.getData("text");
+        var cardElement = document.getElementById(data);
+        var target = event.target;
+
+        if (target.tagName !== "DIV") {
+            target = target.parentNode;
+        }
+
+        if (target.id.startsWith("B") && target.children.length === 0) { // Ensure B boxes can only have one card
+            cardElement.src = cardElement.dataset.imgPath; // Display card face in B boxes
+        } else if (target.id.startsWith("A")) { // Allow returning cards to A box
+            cardElement.src = cardElement.dataset.backImg; // Display card back in A boxes
+        }
+
+        target.appendChild(cardElement);
+
+        updateStepCount();
+        checkIfDropZoneFull();
+    }
+
+    function updateStepCount() {
+        var stepCounts = document.getElementById("stepCounts");
+        stepCounts.innerText = parseInt(stepCounts.innerText) + 1;
+    }
+
+    function checkIfDropZoneFull() {
+        var cardsInDropZone = Array.from(document.getElementById('dropZone').getElementsByTagName('img'));
+        if (cardsInDropZone.length === 5) {
+            checkSequence(cardsInDropZone);
         }
     }
 
-    // 检查是否形成顺子
-    function checkSequence() {
-        let sortedCards = inDropZone.map(Number).sort((a, b) => a - b);
-        for (let i = 0; i < sortedCards.length - 1; i++) {
-            if (sortedCards[i] + 1 !== sortedCards[i + 1]) {
-                alert('不满足顺子要求，请调整！');
-                return;
-            }
-        }
-        alert('恭喜完成游戏！');
-    }
+    function checkSequence(cards) {
+        var sequence = cards.map(card => parseInt(card.dataset.number)).sort((a, b) => a - b);
+        var isSequential = sequence.every((num, i, arr) => i === 0 || num === arr[i - 1] + 1);
 
-    // 添加牌到B框
-    function addCardToDropZone(imgPath, cardValue) {
-        let emptySlot = document.querySelector('#dropZone td:empty > div > img');
-        if (emptySlot) {
-            emptySlot.src = imgPath;
-            inDropZone.push(cardValue);
+        if (isSequential) {
+            alert("游戏结束，您成功完成游戏！您的步数为：" + document.getElementById("stepCounts").innerText);
+            // Optionally add any other code for game completion here
+        } else {
+            alert("不符合顺子要求，请调整您的牌。");
         }
     }
-
-    // 绑定拖放事件
-    document.getElementById("dropZone").ondrop = drop;
-    document.getElementById("dropZone").ondragover = allowDrop;
-
-    // 绑定重新开始按钮
-    document.getElementById("reloadButton").addEventListener("click", () => {
-// 重置游戏状态
-        moves = 0;
-        document.getElementById("stepCounts").textContent = "当前步数：";
-        currentSuit = suits[Math.floor(Math.random() * suits.length)]; // 重新选择一个花色
-        inDropZone = []; // 清空B框的牌
-        initDeck(); // 重新初始化牌堆
-        resetDropZone(); // 清空并重置B框
-    });
-
-    // 清空并重置B框
-    function resetDropZone() {
-        let dropZoneImages = document.querySelectorAll("#dropZone img");
-        dropZoneImages.forEach(img => {
-            img.src = ""; // 清除图像
-            img.removeAttribute("data-card-value"); // 移除牌值属性
-        });
-    }
-
-    // 页面加载完成后初始化游戏
-    window.onload = () => {
-        initDeck();
-    };
-
-    // 实现拖动放回A框的逻辑（可选）
-    function returnToDeck(event) {
-// 你可以在这里添加逻辑，允许用户将牌从B框拖回A框
-// 注意更新牌的状态和显示，以及相关变量
-    }
-
-    // 注意：这个示例提供了基本的游戏逻辑框架。为了实现完整的游戏，可能还需要添加额外的逻辑，如更精细的错误处理、动画效果、或改善用户交互体验的功能。
 </script>
 </html>

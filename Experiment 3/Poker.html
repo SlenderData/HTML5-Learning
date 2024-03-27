@@ -170,13 +170,12 @@
         return {
             suit: suit,
             number: number,
+            parentID: null,
             get frontImg() {
                 return `img/${this.suit}/${this.number < 10 ? '0' + this.number : this.number}.jpg`;
-                console.log(this.frontImg);
             },
             get backImg() {
                 return "img/card-back.webp";
-                console.log(this.backImg);
             }
         };
     }
@@ -189,10 +188,14 @@
         deck = shuffle(deck);
 
         deck.forEach((card, index) => {
-            const cardElement = document.getElementById(`drag${index + 1}`);
+            const cardElement = document.getElementById(`drag${index + 1 < 10 ? '0':''}${index + 1}`);
             cardElement.dataset.suit = card.suit;
             cardElement.dataset.number = card.number;
+            card.parentID = cardElement.parentNode.id;
+            cardElement.dataset.parentID = card.parentID;
+            console.log(cardElement.dataset.parentID);
             cardElement.dataset.frontImg = card.frontImg;
+            console.log(cardElement.dataset.frontImg);
             cardElement.src = card.backImg; // Initial display is card back
         });
     }

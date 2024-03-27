@@ -170,11 +170,13 @@
         return {
             suit: suit,
             number: number,
-            get imgPath() {
+            get frontImg() {
                 return `img/${this.suit}/${this.number < 10 ? '0' + this.number : this.number}.jpg`;
+                console.log(this.frontImg);
             },
             get backImg() {
                 return "img/card-back.webp";
+                console.log(this.backImg);
             }
         };
     }
@@ -182,6 +184,7 @@
     function initializeDeck() {
         const suits = ['clubs', 'diamonds', 'hearts', 'spades'];
         const chosenSuit = suits[Math.floor(Math.random() * suits.length)];
+        console.log(chosenSuit);
         let deck = Array.from({length: 13}, (v, k) => createCard(chosenSuit, k + 1));
         deck = shuffle(deck);
 
@@ -189,7 +192,7 @@
             const cardElement = document.getElementById(`drag${index + 1}`);
             cardElement.dataset.suit = card.suit;
             cardElement.dataset.number = card.number;
-            cardElement.dataset.imgPath = card.imgPath;
+            cardElement.dataset.frontImg = card.frontImg;
             cardElement.src = card.backImg; // Initial display is card back
         });
     }
@@ -221,7 +224,7 @@
         }
 
         if (target.id.startsWith("B") && target.children.length === 0) { // Ensure B boxes can only have one card
-            cardElement.src = cardElement.dataset.imgPath; // Display card face in B boxes
+            cardElement.src = cardElement.dataset.frontImg; // Display card face in B boxes
         } else if (target.id.startsWith("A")) { // Allow returning cards to A box
             cardElement.src = cardElement.dataset.backImg; // Display card back in A boxes
         }

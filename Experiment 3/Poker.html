@@ -43,7 +43,7 @@
         margin: 20px auto;
         padding: 20px;
         overflow: hidden;
-        width: 800px;
+        width: 500px;
         text-align: center;
     }
 
@@ -59,67 +59,71 @@
         <tr>
             <td>
                 <div id="A01">
-                    <img src="img/card-back.webp" id="drag01" draggable="true" ondragstart="drag(event)"/>
+                    <img src="img/card-back.webp" alt="poker01" id="drag01" draggable="true" ondragstart="drag(event)"/>
                 </div>
             </td>
             <td>
                 <div id="A02">
-                    <img src="img/card-back.webp" id="drag02" draggable="true" ondragstart="drag(event)"/>
+                    <img src="img/card-back.webp" alt="poker02" id="drag02" draggable="true" ondragstart="drag(event)"/>
                 </div>
             </td>
             <td>
                 <div id="A03">
-                    <img src="img/card-back.webp" id="drag03" draggable="true" ondragstart="drag(event)"/>
+                    <img src="img/card-back.webp" alt="poker03" id="drag03" draggable="true" ondragstart="drag(event)"/>
                 </div>
             </td>
             <td>
                 <div id="A04">
-                    <img src="img/card-back.webp" id="drag04" draggable="true" ondragstart="drag(event)"/>
+                    <img src="img/card-back.webp" alt="poker04" id="drag04" draggable="true" ondragstart="drag(event)"/>
                 </div>
             </td>
             <td>
                 <div id="A05">
-                    <img src="img/card-back.webp" id="drag05" draggable="true" ondragstart="drag(event)"/>
+                    <img src="img/card-back.webp" alt="poker05" id="drag05" draggable="true" ondragstart="drag(event)"/>
                 </div>
             </td>
             <td>
                 <div id="A06">
-                    <img src="img/card-back.webp" id="drag06" draggable="true" ondragstart="drag(event)"/>
+                    <img src="img/card-back.webp" alt="poker06" id="drag06" draggable="true" ondragstart="drag(event)"/>
                 </div>
             </td>
             <td>
                 <div id="A07">
-                    <img src="img/card-back.webp" id="drag07" draggable="true" ondragstart="drag(event)"/>
+                    <img src="img/card-back.webp" alt="poker07" id="drag07" draggable="true" ondragstart="drag(event)"/>
                 </div>
             </td>
+        </tr>
+    </table>
+    <table style="margin: auto;">
+        <tr>
             <td>
                 <div id="A08">
-                    <img src="img/card-back.webp" id="drag08" draggable="true" ondragstart="drag(event)"/>
+                    <img src="img/card-back.webp" alt="poker08" id="drag08" draggable="true" ondragstart="drag(event)"/>
                 </div>
             </td>
             <td>
                 <div id="A09">
-                    <img src="img/card-back.webp" id="drag09" draggable="true" ondragstart="drag(event)"/>
+                    <img src="img/card-back.webp" alt="poker09" id="drag09" draggable="true" ondragstart="drag(event)"/>
                 </div>
             </td>
             <td>
                 <div id="A10">
-                    <img src="img/card-back.webp" id="drag10" draggable="true" ondragstart="drag(event)"/>
+                    <img src="img/card-back.webp" alt="poker10" id="drag10" draggable="true" ondragstart="drag(event)"/>
                 </div>
             </td>
             <td>
                 <div id="A11">
-                    <img src="img/card-back.webp" id="drag11" draggable="true" ondragstart="drag(event)"/>
+                    <img src="img/card-back.webp" alt="poker11" id="drag11" draggable="true" ondragstart="drag(event)"/>
                 </div>
             </td>
             <td>
                 <div id="A12">
-                    <img src="img/card-back.webp" id="drag12" draggable="true" ondragstart="drag(event)"/>
+                    <img src="img/card-back.webp" alt="poker12" id="drag12" draggable="true" ondragstart="drag(event)"/>
                 </div>
             </td>
             <td>
                 <div id="A13">
-                    <img src="img/card-back.webp" id="drag13" draggable="true" ondragstart="drag(event)"/>
+                    <img src="img/card-back.webp" alt="poker13" id="drag13" draggable="true" ondragstart="drag(event)"/>
                 </div>
             </td>
         </tr>
@@ -152,11 +156,11 @@
         </tr>
     </table>
 </div>
-<!--<div id="musicPlayer" class="Container">-->
-<!--    <p>🃏读不懂我的猪肉脸🐷</p>-->
-<!--    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=350 height=86-->
-<!--            src="https://music.163.com/outchain/player?type=2&id=1386002700&auto=1&height=66"></iframe>-->
-<!--</div>-->
+<div id="musicPlayer" class="Container">
+    <p>🃏读不懂我的猪肉脸🐷</p>
+    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=350 height=86
+            src="https://music.163.com/outchain/player?type=2&id=1386002700&auto=1&height=66"></iframe>
+</div>
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -188,7 +192,7 @@
         deck = shuffle(deck);
 
         deck.forEach((card, index) => {
-            const cardElement = document.getElementById(`drag${index + 1 < 10 ? '0':''}${index + 1}`);
+            const cardElement = document.getElementById(`drag${index + 1 < 10 ? '0' : ''}${index + 1}`);
             cardElement.dataset.suit = card.suit;
             cardElement.dataset.number = card.number;
             card.parentID = cardElement.parentNode.id;
@@ -196,7 +200,7 @@
             console.log(cardElement.dataset.parentID);
             cardElement.dataset.frontImg = card.frontImg;
             console.log(cardElement.dataset.frontImg);
-            cardElement.src = card.backImg; // Initial display is card back
+            cardElement.dataset.backImg = card.backImg;
         });
     }
 
@@ -226,13 +230,14 @@
             target = target.parentNode;
         }
 
-        if (target.id.startsWith("B") && target.children.length === 0) { // Ensure B boxes can only have one card
-            cardElement.src = cardElement.dataset.frontImg; // Display card face in B boxes
-        } else if (target.id.startsWith("A")) { // Allow returning cards to A box
-            cardElement.src = cardElement.dataset.backImg; // Display card back in A boxes
+        if (target.id.startsWith("B") && target.children.length === 0) {
+            cardElement.src = cardElement.dataset.frontImg;
+            target.appendChild(cardElement);
+        } else if (target.id.startsWith("A") || target.id.startsWith("d")) {
+            cardElement.src = cardElement.dataset.backImg;
+            const targetDiv = document.getElementById(cardElement.dataset.parentID);
+            targetDiv.appendChild(cardElement);
         }
-
-        target.appendChild(cardElement);
 
         updateStepCount();
         checkIfDropZoneFull();
@@ -251,14 +256,15 @@
     }
 
     function checkSequence(cards) {
-        var sequence = cards.map(card => parseInt(card.dataset.number)).sort((a, b) => a - b);
-        var isSequential = sequence.every((num, i, arr) => i === 0 || num === arr[i - 1] + 1);
+        // var sequence = cards.map(card => parseInt(card.dataset.number)).sort((a, b) => a - b);  // 取消该句注释并将下一行注释掉可实现乱序顺子
+        var sequence = cards.map(card => parseInt(card.dataset.number));
+        var isSequential1 = sequence.every(((num, i, arr) => i === 0 || num === arr[i - 1] + 1));  // 正序顺子
+        var isSequential2 = sequence.every(((num, i, arr) => i === 0 || num === arr[i - 1] - 1));  // 逆序顺子
 
-        if (isSequential) {
+        if (isSequential1 || isSequential2) {
             alert("游戏结束，您成功完成游戏！您的步数为：" + document.getElementById("stepCounts").innerText);
-            // Optionally add any other code for game completion here
         } else {
-            alert("不符合顺子要求，请调整您的牌。");
+            console.log("不符合顺子要求，请调整您的牌。");
         }
     }
 </script>

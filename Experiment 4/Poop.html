@@ -48,41 +48,41 @@
         <input type="radio" id="q01_a02" name="q01" value="a02"><label for="q01_a02">带着激情准备好了！</label>
     </div>
     <div class="Container">
-        <h3>2. 您近期有什么如厕问题吗？</h3>
-        <input type="radio" id="q02_a01" name="q02" value="a01"><label for="q02_a01">正常</label><br>
-        <input type="radio" id="q02_a02" name="q02" value="a02"><label for="q02_a02">便秘</label><br>
-        <input type="radio" id="q02_a03" name="q02" value="a03"><label for="q02_a03">腹泻</label>
+        <h3>2. 您多久排遗一次？</h3>
+        <input type="radio" id="q02_a01" name="q02" value="a01"><label for="q02_a01">随时随地</label><br>
+        <input type="radio" id="q02_a02" name="q02" value="a02"><label for="q02_a02">每天大于 2 次</label><br>
+        <input type="radio" id="q02_a03" name="q02" value="a03"><label for="q02_a03">每天 1 次或 2 次</label><br>
+        <input type="radio" id="q02_a04" name="q02" value="a04"><label for="q02_a04">二至三天 1 次</label><br>
+        <input type="radio" id="q02_a05" name="q02" value="a05"><label for="q02_a05">四至七天 1 次</label><br>
+        <input type="radio" id="q02_a06" name="q02" value="a06"><label for="q02_a06">一至两周 1 次</label><br>
+        <input type="radio" id="q02_a07" name="q02" value="a07"><label for="q02_a07">一个月及以上 1 次</label><br>
+        <input type="radio" id="q02_a08" name="q02" value="a08"><label for="q02_a08">🧚我是仙女不拉💩</label>
     </div>
     <div class="Container">
-        <h3>3. 您多久排遗一次？</h3>
-        <input type="radio" id="q03_a01" name="q03" value="a01"><label for="q03_a01">随时随地</label><br>
-        <input type="radio" id="q03_a02" name="q03" value="a02"><label for="q03_a02">每天大于 2 次</label><br>
-        <input type="radio" id="q03_a03" name="q03" value="a03"><label for="q03_a03">每天 1 次或 2 次</label><br>
-        <input type="radio" id="q03_a04" name="q03" value="a04"><label for="q03_a04">二至三天 1 次</label><br>
-        <input type="radio" id="q03_a05" name="q03" value="a05"><label for="q03_a05">四至七天 1 次</label><br>
-        <input type="radio" id="q03_a06" name="q03" value="a06"><label for="q03_a06">一至两周 1 次</label><br>
-        <input type="radio" id="q03_a07" name="q03" value="a07"><label for="q03_a07">一个月及以上 1 次</label><br>
-        <input type="radio" id="q03_a08" name="q03" value="a08"><label for="q03_a08">🧚我是仙女不拉💩</label>
-    </div>
-    <div class="Container">
-        <h3>4. 您最近拉的💩是什么颜色？</h3>
-        <input type="color" id="q04_poopColor" name="q04" value="#B35F47">
-        <span id="q04_showPoopColor" style="font-weight: bold; color: #B35F47;">
-            <label for="q04_poopColor">这个颜色！</label>
-        </span>
+        <h3>3. 您最近拉的💩是什么颜色？</h3>
+        <input type="color" id="q03_poopColor" name="q03" value="#803807">
+        <label for="q03_poopColor">
+            <span id="q03_showPoopColor" style="font-weight: bold; color: #803807;">这个颜色！</span>
+        </label>
         <script>
-            document.getElementById('q04_poopColor').addEventListener('input', function () {
-                document.getElementById('q04_showPoopColor').style.color = this.value;
+            document.getElementById('q03_poopColor').addEventListener('input', function () {
+                document.getElementById('q03_showPoopColor').style.color = this.value;
             });
         </script>
     </div>
     <div class="Container">
-        <h3>5. 您最近拉的💩有什么形状？</h3>
-        <input type="checkbox" id="q05_a01" name="q05" value="a01"><label for="q05_a01">糊状</label><br>
-        <input type="checkbox" id="q05_a02" name="q05" value="a02"><label for="q05_a02">颗粒状</label><br>
-        <input type="checkbox" id="q05_a03" name="q05" value="a03"><label for="q05_a03">水样</label><br>
-        <input type="checkbox" id="q05_a04" name="q05" value="a04"><label for="q05_a04">硬块</label><br>
-        <input type="checkbox" id="q05_a05" name="q05" value="a05"><label for="q05_a05">其他</label>
+        <h3>4. 您最近拉的💩有什么形状？</h3>
+        <input type="checkbox" id="q04_a01" name="q04" value="a01"><label for="q04_a01">糊状</label><br>
+        <input type="checkbox" id="q04_a02" name="q04" value="a02"><label for="q04_a02">颗粒状</label><br>
+        <input type="checkbox" id="q04_a03" name="q04" value="a03"><label for="q04_a03">水样</label><br>
+        <input type="checkbox" id="q04_a04" name="q04" value="a04"><label for="q04_a04">硬块</label><br>
+        <input type="checkbox" id="q04_a05" name="q04" value="a05"><label for="q04_a05">其他</label>
+    </div>
+    <div class="Container">
+        <h3>5. 您近期有什么如厕问题吗？</h3>
+        <input type="radio" id="q05_a01" name="q05" value="a01"><label for="q05_a01">正常</label><br>
+        <input type="radio" id="q05_a02" name="q05" value="a02"><label for="q05_a02">便秘</label><br>
+        <input type="radio" id="q05_a03" name="q05" value="a03"><label for="q05_a03">腹泻</label>
     </div>
 </form>
 </body>

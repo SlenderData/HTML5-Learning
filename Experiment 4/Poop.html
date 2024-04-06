@@ -114,6 +114,78 @@
         <input type="radio" id="q09_a02" name="q09" value="a02"><label for="q09_a02">便秘</label><br>
         <input type="radio" id="q09_a03" name="q09" value="a03"><label for="q09_a03">腹泻</label>
     </div>
+    <div class="Container">
+        <h3>10. 您认为是什么让您拥有如此优秀的排遗状态？</h3>
+        <input type="checkbox" id="q10_a01" name="q10" value="a01"><label for="q10_a01">基因优秀，没办法</label><br>
+        <input type="checkbox" id="q10_a02" name="q10" value="a02"><label for="q10_a02">健康饮食，注重营养搭配与纤维素摄入</label><br>
+        <input type="checkbox" id="q10_a03" name="q10" value="a03"><label for="q10_a03">注重体育锻炼，增强身体素质</label><br>
+        <input type="checkbox" id="q10_a04" name="q10" value="a04"><label for="q10_a04">积极养生，吃促进肠道的保健品或按摩等</label><br>
+        <input type="checkbox" id="q10_a05" name="q10" value="a05"><label for="q10_a05">保持良好的心态，告诉自己我能行</label><br>
+        <input type="checkbox" id="q10_a06" name="q10" value="a06"><label for="q10_a06">其他：<input type="text" id="q10_a06_other" name="q10_other"></label>
+    </div>
+    <div class="Container">
+        <h3>11. 您认为是什么导致了您的便秘？</h3>
+        <input type="checkbox" id="q11_a01" name="q11" value="a01"><label for="q11_a01">时间紧张，憋久无感</label><br>
+        <input type="checkbox" id="q11_a02" name="q11" value="a02"><label for="q11_a02">饮食不健康，经常吃辛辣油腻食物</label><br>
+        <input type="checkbox" id="q11_a03" name="q11" value="a03"><label for="q11_a03">缺少运动，长时间久坐</label><br>
+        <input type="checkbox" id="q11_a04" name="q11" value="a04"><label for="q11_a04">喝水少</label><br>
+        <input type="checkbox" id="q11_a05" name="q11" value="a05"><label for="q11_a05">压力大，心情焦虑</label><br>
+        <input type="checkbox" id="q11_a06" name="q11" value="a06"><label for="q11_a06">身体问题，有消化系统疾病</label><br>
+        <input type="checkbox" id="q11_a07" name="q11" value="a07"><label for="q11_a07">拉屎时注意力不集中</label><br>
+        <input type="checkbox" id="q11_a08" name="q11" value="a08"><label for="q11_a08">讨厌拉屎环境</label><br>
+        <input type="checkbox" id="q11_a09" name="q11" value="a09"><label for="q11_a09">其他：<input type="text" id="q11_a09_other" name="q11_other"></label>
+    </div>
+    <div class="Container">
+        <h3>12. 您认为是什么导致了您的腹泻？</h3>
+        <input type="checkbox" id="q12_a01" name="q12" value="a01"><label for="q12_a01">身体问题，一直这样</label><br>
+        <input type="checkbox" id="q12_a02" name="q12" value="a02"><label for="q12_a02">有肠炎或消化不良等疾病</label><br>
+        <input type="checkbox" id="q12_a03" name="q12" value="a03"><label for="q12_a03">吃的东西容易蹿，如不干净的食物，咖啡水果等助排食物</label><br>
+        <input type="checkbox" id="q12_a04" name="q12" value="a04"><label for="q12_a04">身体受凉</label><br>
+        <input type="checkbox" id="q12_a05" name="q12" value="a05"><label for="q12_a05">紧张焦虑等心理问题</label><br>
+        <input type="checkbox" id="q12_a06" name="q12" value="a06"><label for="q12_a06">故意的</label><br>
+        <input type="checkbox" id="q12_a07" name="q12" value="a07"><label for="q12_a07">其他：<input type="text" id="q12_a07_other" name="q12_other"></label>
+    </div>
+    <div class="Container">
+        <h3>13. 您平时关心自己的排便问题吗？</h3>
+        <input type="radio" id="q13_a01" name="q13" value="a01"><label for="q13_a01">时刻关心，仔细记录时间频率外观<span id="q13_a01_showPoopColor" style="color: #803807;">颜色</span></label><br>
+        <input type="radio" id="q13_a02" name="q13" value="a02"><label for="q13_a02">比较关心，尽量采取有效方法让自己有正常的排便</label><br>
+        <input type="radio" id="q13_a03" name="q13" value="a03"><label for="q13_a03">稍微关心，正常范围内即可</label><br>
+        <input type="radio" id="q13_a04" name="q13" value="a04"><label for="q13_a04">不怎么关心，出现便秘腹泻问题后才想解决办法</label><br>
+        <input type="radio" id="q13_a05" name="q13" value="a05"><label for="q13_a05">无所谓，爱咋样咋样</label>
+        <script>
+            document.getElementById('q03_poopColor').addEventListener('input', function () {
+                document.getElementById('q13_a01_showPoopColor').style.color = this.value;
+            });
+        </script>
+    </div>
+    <div class="Container">
+        <h3>14. 如果出现排便问题，您通常会采取什么办法解决？</h3>
+        <input type="checkbox" id="q14_a01" name="q14" value="a01"><label for="q14_a01">优秀的肠道没有问题</label><br>
+        <input type="checkbox" id="q14_a02" name="q14" value="a02"><label for="q14_a02">用药物等辅助工具暂时解决问题</label><br>
+        <input type="checkbox" id="q14_a03" name="q14" value="a03"><label for="q14_a03">反思原因，调整饮食与生活作息，希望长效解决问题</label><br>
+        <input type="checkbox" id="q14_a04" name="q14" value="a04"><label for="q14_a04">采用养生保健技术，调养身体，轻松通畅</label><br>
+        <input type="checkbox" id="q14_a05" name="q14" value="a05"><label for="q14_a05">调整心态，相信自己</label><br>
+        <input type="checkbox" id="q14_a06" name="q14" value="a06"><label for="q14_a06">没关系，我不解决</label><br>
+        <input type="checkbox" id="q14_a07" name="q14" value="a07"><label for="q14_a07">其他：<input type="text" id="q14_a07_other" name="q14_other"></label>
+    </div>
+    <div class="Container">
+        <h3>15. 您认为讨论拉💩状况是个有意义的话题吗？</h3>
+        <input type="checkbox" id="q15_a01" name="q15" value="a01"><label for="q15_a01">非常有意义，拉屎是一种正常的活动，没什么羞于讨论的</label><br>
+        <input type="checkbox" id="q15_a02" name="q15" value="a02"><label for="q15_a02">特别有意义，拉屎可以减少毒素加快代谢保护器官，对人体健康非常重要</label><br>
+        <input type="checkbox" id="q15_a03" name="q15" value="a03"><label for="q15_a03">十分有意义，我爱我的身体，关心自己的排便情况</label><br>
+        <input type="checkbox" id="q15_a04" name="q15" value="a04"><label for="q15_a04">超级有意义，现在年轻人的排便问题日益增多，维护身体健康刻不容缓</label><br>
+        <input type="checkbox" id="q15_a05" name="q15" value="a05"><label for="q15_a05">没意义，我觉得公众讨论拉屎这个问题是不文明的</label><br>
+        <input type="checkbox" id="q15_a06" name="q15" value="a06"><label for="q15_a06">没意义，我觉得和别人讨论拉屎问题会让我羞涩</label><br>
+        <input type="checkbox" id="q15_a07" name="q15" value="a07"><label for="q15_a07">其他：<input type="text" id="q15_a07_other" name="q15_other"></label>
+    </div>
+    <div class="Container">
+        <h3>16. 最后，您可以为有排便问题的同学们（包括自己）给出宝贵的意见吗？</h3>
+        <textarea id="q16" name="q16" rows="5" style="width: 100%;"></textarea>
+    </div>
+    <div class="Container">
+        <h3>感谢您的填写，您的信息将会被保密，我们会对您的信息进行统计分析，谢谢！</h3>
+        <input type="submit" value="提交">
+    </div>
 </form>
 </body>
 </html>

@@ -65,6 +65,7 @@
             <span id="q03_showPoopColor" style="font-weight: bold; color: #803807;">这个颜色！</span>
         </label>
         <script>
+            // 根据颜色选择器的值改变颜色显示
             document.getElementById('q03_poopColor').addEventListener('input', function () {
                 document.getElementById('q03_showPoopColor').style.color = this.value;
             });
@@ -153,6 +154,7 @@
         <input type="radio" id="q13_a04" name="q13" value="a04"><label for="q13_a04">不怎么关心，出现便秘腹泻问题后才想解决办法</label><br>
         <input type="radio" id="q13_a05" name="q13" value="a05"><label for="q13_a05">无所谓，爱咋样咋样</label>
         <script>
+            // 根据颜色选择器的值改变颜色显示
             document.getElementById('q03_poopColor').addEventListener('input', function () {
                 document.getElementById('q13_a01_showPoopColor').style.color = this.value;
             });

@@ -33,7 +33,7 @@
     <h2>大学生拉屎状况调查</h2>
     <p>A survey on pooping condition of college students.</p>
 </div>
-<form>
+<form id="surveyForm">
     <div class="Container">
         <h3>0. 你是？</h3>
         <label for="q00_name">姓名：</label>
@@ -190,4 +190,64 @@
     </div>
 </form>
 </body>
+<script>
+    // 初始设置：禁用某些问题
+    const initialDisabled = ['q07', 'q08', 'q10', 'q11', 'q12'];
+    initialDisabled.forEach(id => {
+        document.querySelectorAll(`input[name^=${id}]`).forEach(input => {
+            input.disabled = true;  // 初始化时禁用输入
+        });
+    });
+
+    // 动态启用或禁用问题
+    function toggleQuestions(condition, ids) {
+        ids.forEach(id => {
+            document.querySelectorAll(`input[name^=${id}]`).forEach(input => {
+                input.disabled = !condition;
+                if (!condition) {
+                    input.checked = false;  // 如果禁用，则清除选中状态
+                }
+            });
+        });
+    }
+
+    // 为 q06 和 q09 的选择设置事件监听
+    document.querySelectorAll('input[name="q06"]').forEach(input => {
+        input.addEventListener('change', function() {
+            toggleQuestions(this.checked && this.value === 'a01', ['q07']);
+            toggleQuestions(this.checked && this.value === 'a02', ['q08']);
+        });
+    });
+
+    document.querySelectorAll('input[name="q09"]').forEach(input => {
+        input.addEventListener('change', function() {
+            toggleQuestions(this.checked && this.value === 'a01', ['q10']);
+            toggleQuestions(this.checked && this.value === 'a02', ['q11']);
+            toggleQuestions(this.checked && this.value === 'a03', ['q12']);
+        });
+    });
+
+    // 检查表单是否完全回答（仅检查启用的字段）
+    function checkAllAnswered() {
+        let allAnswered = true;
+        document.querySelectorAll('input:not(:disabled), select:not(:disabled), textarea:not(:disabled)').forEach(input => {
+            if ((input.type === "radio" || input.type === "checkbox") && !input.checked && document.querySelector(`input[name="${input.name}"]:checked`) === null) {
+                allAnswered = false;
+            } else if (input.type !== "submit" && input.value === "" && input.required) {
+                allAnswered = false;
+            }
+        });
+        return allAnswered;
+    }
+
+    // 提交表单之前的检查
+    document.getElementById('surveyForm').addEventListener('submit', function(event) {
+        if (!checkAllAnswered()) {
+            event.preventDefault();  // 阻止表单提交
+            alert('请回答所有问题后再提交。');  // 弹出提示信息
+        } else {
+            alert('提交成功！');  // 提交成功
+        }
+    });
+</script>
 </html>

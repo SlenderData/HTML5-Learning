@@ -262,7 +262,7 @@
         var isSequential2 = sequence.every(((num, i, arr) => i === 0 || num === arr[i - 1] - 1));  // 逆序顺子
 
         if (isSequential1 || isSequential2) {
-             setTimeout(() => alert("游戏结束，您成功完成游戏！您的步数为：" + document.getElementById("stepCounts").innerText), 100);  // 延迟0.1秒后弹出提示框
+            setTimeout(() => alert("游戏结束，您成功完成游戏！您的步数为：" + document.getElementById("stepCounts").innerText), 100);  // 延迟0.1秒后弹出提示框
         } else {
             console.log("不符合顺子要求，请调整您的牌。");
         }

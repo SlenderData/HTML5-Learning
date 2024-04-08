@@ -19,6 +19,21 @@
         border-radius: 10px;
         cursor: pointer;
         padding: 10px;
+        margin: 0 20px 0 20px;
+    }
+
+    th {
+        background-color: #D6E4E5;
+        font-weight: bold;
+        width: 150px;
+        height: 2em;
+        border: 1px solid #333;
+    }
+
+    td {
+        width: 150px;
+        height: 1.5em;
+        border: 1px solid #333;
     }
 
     .inputArea {
@@ -48,15 +63,56 @@
     <h1 style="text-align: center;">饼状图和柱状图绘制</h1><br>
     <form>
         <label for="title">请输入图表标题：</label>
-        <input type="text" id="title" style="width: 300px; height: 1.5em;">
+        <input type="text" id="title" style="width: 300px; height: 2em;">
+        <br><br><br>
+        <table id="inputTable" style="border: 1px solid #333; margin: auto;">
+            <thead>
+            <tr>
+                <th>类目名</th>
+                <th>数据值</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+            </tr>
+            <tr>
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+            </tr>
+            <tr>
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+            </tr>
+            <tr>
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+            </tr>
+            <tr>
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+            </tr>
+            <tr>
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+            </tr>
+            <tr>
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+            </tr>
+            <tr>
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+            </tr>
+            <tr>
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+            </tr>
+            </tbody>
+        </table>
         <br><br>
-        <label for="unit">请输入数据单位：</label>
-        <input type="text" id="unit" style="width: 300px; height: 1.5em;">
-        <br><br>
-        <label for="data">请输入数据（用半角逗号分隔）：</label><br>
-        <textarea id="data" style="width: 460px; height: 200px;"></textarea>
-        <br><br>
-        <div style="text-align: center">
+        <div style="text-align: center;">
             <button type="button" onclick="drawPieChart()">绘制饼状图</button>
             <button type="button" onclick="drawBarChart()">绘制柱状图</button>
         </div>
@@ -67,35 +123,61 @@
 </div>
 </body>
 <script>
-    function drawPieChart() {
-        let canvas = document.getElementById("canvasChart");
-        let ctx = canvas.getContext("2d");
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        let title = document.getElementById("title").value;
-        let unit = document.getElementById("unit").value;
-        let data = document.getElementById("data").value.split(",").map(Number);
-
-        let total = data.reduce((a, b) => a + b, 0);
-        let startAngle = 0;
-        let endAngle = 0;
-
-        for (let i = 0; i < data.length; i++) {
-            ctx.fillStyle = `hsl(${i * 360 / data.length}, 100%, 50%)`;
-            endAngle = startAngle + data[i] / total * 2 * Math.PI;
-            ctx.beginPath();
-            ctx.moveTo(canvas.width / 2, canvas.height / 2);
-            ctx.arc(canvas.width / 2, canvas.height / 2, canvas.height / 2, startAngle, endAngle);
-            ctx.fill();
-            startAngle = endAngle;
-        }
-
-        ctx.fillStyle = "#000000";
-        ctx.font = "bold 20px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText(title, canvas.width / 2, 30);
-        ctx.fillText(unit, canvas.width / 2, canvas.height - 30);
+    // 随机选取用于数据可视化的颜色
+    function chooseColor(numColor) {
+        let color = ["#5470C6", "#91CC75", "#FAC858", "#EE6666", "#73C0DE", "#3BA272", "#FC8452", "#9A60D4"];
+        // 打乱排序
+        color.sort(function () {
+            return Math.random() - 0.5;
+        });
+        // 返回前numColor个颜色
+        return color.slice(0, numColor);
     }
+
+    // 获取表数据，同时进行有效性检查，有效返回数据组，无效返回False
+    // 类目名和数据值必须成对出现，且数据必须为数字
+    // 可以不用填满8组数据，但至少填写1组数据
+    // 跳过空白行，跳过表头
+    function getTableData() {
+        let data = [];
+        let table = document.getElementById("inputTable");
+        for (let i = 1; i < table.rows.length; i++) {
+            let row = table.rows[i];
+            if (row.cells[0].innerText === "" && row.cells[1].innerText === "") {
+                continue;
+            }
+            if (row.cells[0].innerText === "" || row.cells[1].innerText === "") {
+                alert("请填写完整数据！");
+                return false;
+            }
+            if (isNaN(row.cells[1].innerText)) {
+                alert("数据必须为数字！");
+                return false;
+            }
+            data.push([row.cells[0].innerText, parseFloat(row.cells[1].innerText)]);
+        }
+        if (data.length === 0) {
+            alert("请至少填写一组数据！");
+            return false;
+        }
+        return data;
+    }
+
+    // 检查屏幕缩放，适配高清屏
+    function adaptHiDPI(canvas) {
+
+    }
+
+    // 绘制饼状图
+    function drawPieChart() {
+
+    }
+
+    // 绘制柱状图
+    function drawBarChart() {
+
+    }
+
 
 </script>
 </html>

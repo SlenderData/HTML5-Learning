@@ -70,7 +70,7 @@
 <body>
 <div class="main">
     <div class="inputArea">
-        <h1 style="text-align: center;">饼状图和柱状图绘制</h1><br>
+        <h1 style="text-align: center;">饼图和柱状图绘制</h1><br>
         <form>
             <label for="title">请输入图表标题：</label>
             <input type="text" id="title" style="width: 210px; height: 2em;" value="测试数据">
@@ -120,7 +120,7 @@
             </table>
             <br><br>
             <div style="text-align: center;">
-                <button type="button" onclick="drawPieChart()">绘制饼状图</button>
+                <button type="button" onclick="drawPieChart()">绘制饼图</button>
                 <button type="button" onclick="drawBarChart()">绘制柱状图</button>
             </div>
         </form>
@@ -208,7 +208,7 @@
         return canvas;
     }
 
-    // 绘制饼状图
+    // 绘制饼图
     function drawPieChart() {
         let data = getTableData();
         if (data === false) {

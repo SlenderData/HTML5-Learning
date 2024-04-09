@@ -22,6 +22,7 @@
         cursor: pointer;
         padding: 10px;
         margin: 0 20px 0 20px;
+        min-width: 6em;
     }
 
     th {
@@ -36,6 +37,7 @@
         width: 150px;
         height: 1.5em;
         border: 1px solid #333;
+        background-color: white;
     }
 
     .main {
@@ -52,7 +54,7 @@
         margin: 50px 0 0 50px;
         padding: 20px;
         overflow: hidden;
-        height: 570px;
+        height: 620px;
         float: left;
     }
 
@@ -62,7 +64,6 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         margin: 50px;
         padding: 20px;
-        /*width: calc(100% - 690px);*/
         float: left;
         text-align: center;
     }
@@ -73,8 +74,7 @@
         <h1 style="text-align: center;">饼图和柱状图绘制</h1><br>
         <form>
             <label for="title">请输入图表标题：</label>
-            <input type="text" id="title" style="width: 210px; height: 2em;" value="测试数据">
-            <!--            <input type="text" id="title" style="width: 210px; height: 2em;" value="">-->
+            <input type="text" id="title" style="width: 210px; height: 2em;">
             <br><br><br>
             <table id="inputTable" style="border: 1px solid #333; margin: auto;">
                 <thead>
@@ -122,6 +122,8 @@
             <div style="text-align: center;">
                 <button type="button" onclick="drawPieChart()">绘制饼图</button>
                 <button type="button" onclick="drawBarChart()">绘制柱状图</button>
+                <br><br>
+                <button type="button" onclick="generateRandomData()">生成随机数据</button>
             </div>
         </form>
     </div>
@@ -132,18 +134,26 @@
 </div>
 </body>
 <script>
-    // 填充表格随机数据便于测试
-    function fillTableWithRandomData() {
+    // 填生成随机数据便于测试
+    function generateRandomData() {
+        var title = document.getElementById('title');
+        title.value = '测试数据';
         var table = document.getElementById('inputTable');
         var rows = table.getElementsByTagName('tr');
-        for (var i = 1; i < rows.length; i++) { // 从1开始，跳过表头
+        // 清空表格
+        for (var i = 1; i < rows.length; i++) {
+            var cells = rows[i].getElementsByTagName('td');
+            cells[0].innerText = '';
+            cells[1].innerText = '';
+        }
+        // 随机生成4-8组数据
+        var num = Math.floor(Math.random() * 5) + 4;
+        for (var i = 1; i < num + 1; i++) { // 从1开始，跳过表头
             var cells = rows[i].getElementsByTagName('td');
             cells[0].innerText = '类目' + i;
             cells[1].innerText = Math.floor(Math.random() * 100); // 随机数值
         }
     }
-
-    window.onload = fillTableWithRandomData;
 
     // 随机选取用于数据可视化的颜色
     function chooseColor(numColor) {
@@ -153,7 +163,6 @@
             return Math.random() - 0.5;
         });
         // 返回前numColor个颜色
-        console.log(color.slice(0, numColor));
         return color.slice(0, numColor);
     }
 
@@ -184,27 +193,31 @@
                 alert("数据必须为数字！");
                 return false;
             }
-            data.push([row.cells[0].innerText, parseFloat(row.cells[1].innerText)]);
+            data.push([row.cells[0].innerText, parseFloat(row.cells[1].innerText), 0]);
         }
         // 至少填写一组数据
         if (data.length === 0) {
             alert("请至少填写一组数据！");
             return false;
         }
-        console.log(data);
+        // 计算各数据的百分占比
+        let sum = data.reduce((acc, cur) => acc + cur[1], 0);
+        for (let i = 0; i < data.length; i++) {
+            data[i][2] = data[i][1] / sum * 100;
+        }
+
         return data;
     }
 
+    // 获取高清屏幕的设备像素比
+    const ratio = window.devicePixelRatio || 1;
+
     // 适配高清屏
     function createHDCanvas(canvas, w, h) {
-        const ratio = window.devicePixelRatio || 1;
         canvas.width = w * ratio; // 实际渲染像素
         canvas.height = h * ratio; // 实际渲染像素
         canvas.style.width = `${w}px`; // 控制显示大小
         canvas.style.height = `${h}px`; // 控制显示大小
-        // const ctx = canvas.getContext('2d')
-        // ctx.scale(ratio, ratio)
-        // canvas 绘制
         return canvas;
     }
 
@@ -215,15 +228,21 @@
             return;
         }
         let canvas = document.getElementById("canvasChart");
-        let ctx = createHDCanvas(canvas, 1000, 700).getContext("2d");
+        canvas = createHDCanvas(canvas, 1000, 700);
+        let ctx = canvas.getContext("2d");
         let width = canvas.width;
         let height = canvas.height;
         let centerX = width / 2;
         let centerY = height / 2;
-        let radius = Math.min(width, height) / 2 - 100;
+        let radius = Math.min(width, height) / 2 - 100 * ratio;
         let sum = data.reduce((acc, cur) => acc + cur[1], 0);
         let startAngle = 0;
         let colors = chooseColor(data.length);
+        // 绘制标题
+        ctx.fillStyle = "#000000";
+        ctx.font = "bold " + 30 * ratio + "px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(document.getElementById("title").value, centerX, 50 * ratio);
         for (let i = 0; i < data.length; i++) {
             // 绘制扇形
             let endAngle = startAngle + data[i][1] / sum * 2 * Math.PI;
@@ -233,24 +252,39 @@
             ctx.closePath();
             ctx.fillStyle = colors[i];
             ctx.fill();
-
-            // 绘制标签
+            // 绘制标签线
             let midAngle = (startAngle + endAngle) / 2;
             let x = centerX + Math.cos(midAngle) * radius;
             let y = centerY + Math.sin(midAngle) * radius;
+            // 标签线宽度设置为1个单位像素
+            ctx.lineWidth = 1 * ratio;
             ctx.beginPath();
+            // 标签线起点定位到圆弧中点
             ctx.moveTo(x, y);
-            ctx.lineTo(x + Math.cos(midAngle) * 30, y + Math.sin(midAngle) * 30);
-            if (x + Math.cos(midAngle) * 30 > centerX) {
-                ctx.lineTo(x + Math.cos(midAngle) * 30 + 50, y + Math.sin(midAngle) * 30);
+            // 向外延伸30个单位像素
+            ctx.lineTo(x + Math.cos(midAngle) * 30 * ratio, y + Math.sin(midAngle) * 30 * ratio);
+            // 根据圆弧中点的位置判断接下来标签线的水平延伸方向
+            if (x > centerX) {
+                // 向右延伸50个单位像素
+                ctx.lineTo(x + Math.cos(midAngle) * 30 * ratio + 50 * ratio, y + Math.sin(midAngle) * 30 * ratio);
             } else {
-                ctx.lineTo(x + Math.cos(midAngle) * 30 - 50, y + Math.sin(midAngle) * 30);
+                // 向左延伸50个单位像素
+                ctx.lineTo(x + Math.cos(midAngle) * 30 * ratio - 50 * ratio, y + Math.sin(midAngle) * 30 * ratio);
             }
             ctx.stroke();
-
+            // 绘制标签文字
+            let tempText = data[i][0] + "  占比" + data[i][2].toFixed(2) + "%";
+            // 设置字体大小为15个单位像素
+            ctx.font = 15 * ratio + "px Arial";
+            if (x > centerX) {
+                ctx.textAlign = "left";
+                ctx.fillText(tempText, x + Math.cos(midAngle) * 30 * ratio + 50 * ratio, y + Math.sin(midAngle) * 30 * ratio + 5 * ratio);
+            } else {
+                ctx.textAlign = "right";
+                ctx.fillText(tempText, x + Math.cos(midAngle) * 30 * ratio - 50 * ratio, y + Math.sin(midAngle) * 30 * ratio + 5 * ratio);
+            }
             startAngle = endAngle;
         }
-
     }
 
     // 绘制柱状图
@@ -260,22 +294,42 @@
             return;
         }
         let canvas = document.getElementById("canvasChart");
-        let ctx = createHDCanvas(canvas, 1000, 700).getContext("2d");
+        canvas = createHDCanvas(canvas, 1000, 700);
+        let ctx = canvas.getContext("2d");
         let width = canvas.width;
         let height = canvas.height;
-        let padding = 50;
-        let barWidth = (width - 2 * padding) / data.length;
-        let max = Math.max(...data.map(item => item[1]));
-        let color = chooseColor(1);
+        let barWidth = 50 * ratio;
+        let barGap = 60 * ratio;
+        let maxData = Math.max(...data.map(item => item[1]));
+        let maxBarHeight = height - 250 * ratio;
+        let colors = chooseColor(1);
+        // 绘制标题
+        ctx.fillStyle = "#000000";
+        ctx.font = "bold " + 30 * ratio + "px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(document.getElementById("title").value, width / 2, 50 * ratio);
+        // 绘制柱状图，整体在x轴方向居中
+        let startX = (width - (barWidth + barGap) * data.length + barGap) / 2;
         for (let i = 0; i < data.length; i++) {
-            let x = padding + i * barWidth;
-            let y = height - padding - data[i][1] / max * (height - 2 * padding);
-            ctx.fillStyle = color;
-            ctx.fillRect(x, y, barWidth, height - padding - y);
+            let barHeight = data[i][1] / maxData * maxBarHeight;
+            let startY = height - 100 * ratio - barHeight;
+            // 绘制柱状图
+            ctx.fillStyle = colors[0];
+            ctx.fillRect(startX + i * (barWidth + barGap), startY, barWidth, barHeight);
+            // 绘制标签文字
             ctx.fillStyle = "#000000";
-            ctx.fillText(data[i][0], x + barWidth / 2, height - padding + 20);
-            ctx.fillText(data[i][1], x + barWidth / 2, y - 10);
+            ctx.font = 15 * ratio + "px Arial";
+            ctx.textAlign = "center";
+            ctx.fillText(data[i][0], startX + i * (barWidth + barGap) + barWidth / 2, height - 50 * ratio);
+            ctx.fillText(data[i][1], startX + i * (barWidth + barGap) + barWidth / 2, startY - 10 * ratio);
         }
+        // 绘制x轴参考线，左右超出30个单位像素
+        ctx.beginPath();
+        ctx.moveTo(startX - 30 * ratio, height - 100 * ratio);
+        ctx.lineTo(width - startX + 30 * ratio, height - 100 * ratio);
+        ctx.stroke();
+        // 绘制y轴参考线
+
     }
 
 </script>

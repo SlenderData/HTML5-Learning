@@ -74,7 +74,7 @@
         <form>
             <label for="title">请输入图表标题：</label>
             <input type="text" id="title" style="width: 210px; height: 2em;" value="测试数据">
-<!--            <input type="text" id="title" style="width: 210px; height: 2em;" value="">-->
+            <!--            <input type="text" id="title" style="width: 210px; height: 2em;" value="">-->
             <br><br><br>
             <table id="inputTable" style="border: 1px solid #333; margin: auto;">
                 <thead>
@@ -126,8 +126,8 @@
         </form>
     </div>
     <div class="drawArea">
-        <canvas id="canvasChart" width="1000" height="800"
-                style="border: 1px solid #000000; width: 1000px; height: 800px"></canvas>
+        <canvas id="canvasChart" width="1000" height="700"
+                style="border: 1px solid #000000; width: 1000px; height: 700px"></canvas>
     </div>
 </div>
 </body>
@@ -196,14 +196,14 @@
     }
 
     // 适配高清屏
-    function createHDCanvas (canvas, w, h) {
+    function createHDCanvas(canvas, w, h) {
         const ratio = window.devicePixelRatio || 1;
         canvas.width = w * ratio; // 实际渲染像素
         canvas.height = h * ratio; // 实际渲染像素
         canvas.style.width = `${w}px`; // 控制显示大小
         canvas.style.height = `${h}px`; // 控制显示大小
-        const ctx = canvas.getContext('2d')
-        ctx.scale(ratio, ratio)
+        // const ctx = canvas.getContext('2d')
+        // ctx.scale(ratio, ratio)
         // canvas 绘制
         return canvas;
     }
@@ -215,7 +215,7 @@
             return;
         }
         let canvas = document.getElementById("canvasChart");
-        let ctx = createHDCanvas(canvas, 1000, 800).getContext("2d");
+        let ctx = createHDCanvas(canvas, 1000, 700).getContext("2d");
         let width = canvas.width;
         let height = canvas.height;
         let centerX = width / 2;
@@ -241,7 +241,7 @@
             ctx.beginPath();
             ctx.moveTo(x, y);
             ctx.lineTo(x + Math.cos(midAngle) * 30, y + Math.sin(midAngle) * 30);
-            if(x + Math.cos(midAngle) * 30 > centerX) {
+            if (x + Math.cos(midAngle) * 30 > centerX) {
                 ctx.lineTo(x + Math.cos(midAngle) * 30 + 50, y + Math.sin(midAngle) * 30);
             } else {
                 ctx.lineTo(x + Math.cos(midAngle) * 30 - 50, y + Math.sin(midAngle) * 30);
@@ -250,6 +250,7 @@
 
             startAngle = endAngle;
         }
+
     }
 
     // 绘制柱状图
@@ -259,7 +260,7 @@
             return;
         }
         let canvas = document.getElementById("canvasChart");
-        let ctx = createHDCanvas(canvas, 1000, 800).getContext("2d");
+        let ctx = createHDCanvas(canvas, 1000, 700).getContext("2d");
         let width = canvas.width;
         let height = canvas.height;
         let padding = 50;

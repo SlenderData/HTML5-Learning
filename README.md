@@ -73,3 +73,22 @@ HTML5 编程的课程作业
 ### 在线预览
 
 [点击这里](https://slenderdata.github.io/HTML5-Learning/Experiment-4/Poop.html)
+
+## 实验五：饼状图和柱状图绘制
+
+### 实验目的
+
+1. 熟悉使用canvas绘制图形
+2. 熟悉表单组件及按钮相应事件
+
+### 实验要求
+
+在网页中添加表单组件，要求用户输入统计数据，根据用户数据绘制相应的饼状图和柱状图。
+
+1. 要求对用户输入进行有效性验证；
+2. 通过点击按钮绘制饼状图或柱状图；
+3. 饼状图和柱状图要有数据标注。
+
+### 在线预览
+
+[点击这里](https://slenderdata.github.io/HTML5-Learning/Experiment-5/CanvasChart.html)

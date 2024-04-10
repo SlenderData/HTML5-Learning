@@ -129,29 +129,29 @@
     </div>
     <div class="drawArea">
         <canvas id="canvasChart" width="1000" height="700"
-                style="border: 1px solid #000000; width: 1000px; height: 700px"></canvas>
+                style="width: 1000px; height: 700px"></canvas>
     </div>
 </div>
 </body>
 <script>
     // 填生成随机数据便于测试
     function generateRandomData() {
-        var title = document.getElementById('title');
+        let title = document.getElementById('title');
         title.value = '测试数据';
-        var table = document.getElementById('inputTable');
-        var rows = table.getElementsByTagName('tr');
+        let table = document.getElementById('inputTable');
+        let rows = table.getElementsByTagName('tr');
         // 清空表格
-        for (var i = 1; i < rows.length; i++) {
-            var cells = rows[i].getElementsByTagName('td');
+        for (let i = 1; i < rows.length; i++) {
+            let cells = rows[i].getElementsByTagName('td');
             cells[0].innerText = '';
             cells[1].innerText = '';
         }
         // 随机生成4-8组数据
-        var num = Math.floor(Math.random() * 5) + 4;
-        for (var i = 1; i < num + 1; i++) { // 从1开始，跳过表头
-            var cells = rows[i].getElementsByTagName('td');
-            cells[0].innerText = '类目' + i;
-            cells[1].innerText = Math.floor(Math.random() * 100); // 随机数值
+        let num = Math.floor(Math.random() * 5) + 4;
+        for (let i = 0; i < num; i++) {
+            let cells = rows[i + 1].getElementsByTagName('td');
+            cells[0].innerText = '类目' + (i + 1);
+            cells[1].innerText = Math.floor(Math.random() * 100);
         }
     }
 
@@ -205,7 +205,6 @@
         for (let i = 0; i < data.length; i++) {
             data[i][2] = data[i][1] / sum * 100;
         }
-
         return data;
     }
 
@@ -308,8 +307,58 @@
         ctx.font = "bold " + 30 * ratio + "px Arial";
         ctx.textAlign = "center";
         ctx.fillText(document.getElementById("title").value, width / 2, 50 * ratio);
-        // 绘制柱状图，整体在x轴方向居中
+        // 绘制x轴参考线，左右超出30个单位像素
         let startX = (width - (barWidth + barGap) * data.length + barGap) / 2;
+        ctx.lineWidth = 2 * ratio;
+        ctx.beginPath();
+        ctx.moveTo(startX - 30 * ratio, height - 100 * ratio);
+        ctx.lineTo(width - startX + 30 * ratio, height - 100 * ratio);
+        ctx.stroke();
+        // 绘制x轴箭头
+        ctx.beginPath();
+        ctx.moveTo(width - startX + 30 * ratio, height - 100 * ratio);
+        ctx.lineTo(width - startX + 20 * ratio, height - 105 * ratio);
+        ctx.lineTo(width - startX + 20 * ratio, height - 95 * ratio);
+        ctx.closePath();
+        ctx.fill();
+        // 绘制y轴参考线
+        ctx.beginPath();
+        ctx.moveTo(startX - 30 * ratio, height - 100 * ratio);
+        ctx.lineTo(startX - 30 * ratio, 100 * ratio);
+        ctx.stroke();
+        // 绘制y轴箭头
+        ctx.beginPath();
+        ctx.moveTo(startX - 30 * ratio, 100 * ratio);
+        ctx.lineTo(startX - 35 * ratio, 110 * ratio);
+        ctx.lineTo(startX - 25 * ratio, 110 * ratio);
+        ctx.closePath();
+        ctx.fill();
+        // 绘制y轴元素
+        ctx.font = 15 * ratio + "px Arial";
+        ctx.textAlign = "right";
+        for (let i = 0; i <= maxData; i += maxData / 4) {
+            let y = height - 100 * ratio - i / maxData * maxBarHeight;
+            // 绘制y轴网格线
+            ctx.setLineDash([5, 5]);
+            if (i === 0) {
+                continue;
+            } else {
+                ctx.strokeStyle = "#D3D3D3";
+            }
+            ctx.beginPath();
+            ctx.moveTo(startX - 30 * ratio, y);
+            ctx.lineTo(width - startX + 30 * ratio, y);
+            ctx.stroke();
+            // 绘制y轴刻度
+            ctx.setLineDash([])
+            ctx.strokeStyle = "#000000";
+            ctx.beginPath();
+            ctx.moveTo(startX - 25 * ratio, y);
+            ctx.lineTo(startX - 35 * ratio, y);
+            ctx.stroke();
+            ctx.fillText(i, startX - 40 * ratio, y + 5 * ratio);
+        }
+        // 绘制柱状图，整体在x轴方向居中
         for (let i = 0; i < data.length; i++) {
             let barHeight = data[i][1] / maxData * maxBarHeight;
             let startY = height - 100 * ratio - barHeight;
@@ -320,17 +369,9 @@
             ctx.fillStyle = "#000000";
             ctx.font = 15 * ratio + "px Arial";
             ctx.textAlign = "center";
-            ctx.fillText(data[i][0], startX + i * (barWidth + barGap) + barWidth / 2, height - 50 * ratio);
-            ctx.fillText(data[i][1], startX + i * (barWidth + barGap) + barWidth / 2, startY - 10 * ratio);
+            ctx.fillText(data[i][0], startX + i * (barWidth + barGap) + barWidth / 2, height - 75 * ratio);
+            ctx.fillText(data[i][1], startX + i * (barWidth + barGap) + barWidth / 2, startY - 5 * ratio);
         }
-        // 绘制x轴参考线，左右超出30个单位像素
-        ctx.beginPath();
-        ctx.moveTo(startX - 30 * ratio, height - 100 * ratio);
-        ctx.lineTo(width - startX + 30 * ratio, height - 100 * ratio);
-        ctx.stroke();
-        // 绘制y轴参考线
-
     }
-
 </script>
 </html>

@@ -360,7 +360,7 @@
         // 绘制柱状图，整体在x轴方向居中
         for (let i = 0; i < data.length; i++) {
             let barHeight = data[i][1] / maxData * maxBarHeight;
-            let startY = height - 100 * ratio - barHeight;
+            let startY = height - 101 * ratio - barHeight;
             // 绘制柱状图
             ctx.fillStyle = colors[0];
             ctx.fillRect(startX + i * (barWidth + barGap), startY, barWidth, barHeight);

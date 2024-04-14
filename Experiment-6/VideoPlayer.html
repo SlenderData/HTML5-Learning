@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>VideoPlayer</title>
+</head>
+<style>
+    .video-player {
+        position: relative;
+        width: 640px;
+        margin: auto;
+        background: url('https://raw.githubusercontent.com/SlenderData/img/main/images/2023/07/23/01-40-06-b70fe2b48794dfbd1e554a46e64be935-gaga%E8%9B%99%E8%9B%99%E7%BB%B4%E5%B0%BCNew-6b6ad9.png') no-repeat;
+        background-size: cover;
+        padding: 20px;
+        box-shadow: 0 0 20px #000;
+    }
+
+    video {
+        display: block;
+        width: 100%;
+    }
+
+    .controls {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    button {
+        padding: 10px 20px;
+        margin: 0 10px;
+        background-color: #666;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #555;
+    }
+</style>
+<body>
+<div class="video-player">
+    <video id="videoElement" width="640" height="360">
+        <source src="test.mp4" type="video/mp4">
+        您的浏览器不支持视频标签。
+    </video>
+    <div class="controls">
+        <button onclick="togglePlayPause()">播放/暂停</button>
+        <button onclick="toggleMute()">静音</button>
+        <button onclick="changeSize(1.1)">放大</button>
+        <button onclick="changeSize(0.9)">缩小</button>
+        <!-- 实现快进和快退，你可以调整秒数来定义快进和快退的时间 -->
+        <button onclick="skip(-10)">快退10秒</button>
+        <button onclick="skip(10)">快进10秒</button>
+    </div>
+</div>
+</body>
+<script>
+    var video = document.getElementById('videoElement');
+
+    function togglePlayPause() {
+        if (video.paused) {
+            video.play();
+        } else {
+            video.pause();
+        }
+    }
+
+    function toggleMute() {
+        video.muted = !video.muted;
+    }
+
+    function changeSize(scale) {
+        video.width = video.width * scale;
+        video.height = video.height * scale;
+    }
+
+    function skip(time) {
+        video.currentTime += time;
+    }
+</script>
+</html>

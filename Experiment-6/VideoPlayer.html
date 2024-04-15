@@ -14,14 +14,14 @@
     }
 
     button {
-        font-size: 1.1em;
-        font-weight: bold;
+        font-size: 1.2em;
         background-color: #D6E4E5;
         border: none;
         border-radius: 10px;
         cursor: pointer;
         padding: 10px;
-        margin: 0 20px 0 20px;
+        margin: 10px 10px 0 10px;
+        min-width: 3em;
     }
 
     .main {
@@ -38,6 +38,7 @@
         margin: 50px 0 0 50px;
         padding: 20px;
         float: left;
+        text-align: center;
     }
 
     .playerArea {
@@ -45,99 +46,304 @@
         border-radius: 20px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         margin: 50px;
-        padding: 20px;
+        padding: 10px;
         float: left;
         text-align: center;
     }
+
+    video {
+        border-radius: 15px;
+        background: rgba(0, 0, 0, 0.1);
+    }
+
 </style>
 <body>
 <div class="main">
     <div class="infoArea">
+        <img src="" id="cover" alt="Cover" style="width: 360px; height: 360px; border-radius: 20px;">
+        <h2 id="title"></h2>
+        <h3 id="album"></h3>
+        <h3 id="artist"></h3>
+        <h2>播放列表</h2>
+        <ul id="videoList" style="text-align: left;">
+        </ul>
     </div>
     <div class="playerArea">
+        <video id="video" width="1280" height="720">
+            Your browser does not support the video tag.
+        </video>
+        <div>
+            <button id="volumeButton" onclick="toggleVolume()">🔊</button>
+            <button id="zoomOutButton" onclick="zoomOut()">➖</button>
+            <button id="prevButton" onclick="prevVideo()">⏮️</button>
+            <button id="rewindButton" onclick="rewind()">⏪</button>
+            <button id="playPauseButton" onclick="playPause()">▶️</button>
+            <button id="fastForwardButton" onclick="fastForward()">⏩</button>
+            <button id="nextButton" onclick="nextVideo()">⏭️</button>
+            <button id="zoomInButton" onclick="zoomIn()">➕</button>
+            <button id="fullScreenButton" onclick="fullScreen()">全屏</button>
+        </div>
     </div>
 </div>
 </body>
 <script>
+    // 初始化
+    function initPlayer() {
 
-    // 初始化播放列表
-    function initPlayList() {
-        let videos = [
+        // // 初始化播放列表（外链版）
+        // const videos = [
+        //     {
+        //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/The_greatest_-_Lana_Del_Rey.mp4?raw=true",
+        //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Norman_Fucking_Rockwell!.jpg?raw=true",
+        //         title: "The greatest",
+        //         album: "Norman Fucking Rockwell!",
+        //         artist: "Lana Del Rey"
+        //     },
+        //     {
+        //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/A&W_-_Lana_Del_Rey.mp4?raw=true",
+        //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Did_you_know_that_there's_a_tunnel_under_Ocean_Blvd.jpg?raw=true",
+        //         title: "A&W",
+        //         album: "Did you know that there's a tunnel under Ocean Blvd",
+        //         artist: "Lana Del Rey"
+        //     },
+        //     {
+        //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/34+35_-_Ariana_Grande.mp4?raw=true",
+        //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Positions.jpg?raw=true",
+        //         title: "34+35",
+        //         album: "Positions",
+        //         artist: "Ariana Grande"
+        //     },
+        //     {
+        //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Honeymoon_Avenue_-_Ariana_Grande.mp4?raw=true",
+        //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Yours_Truly.jpg?raw=true",
+        //         title: "Honeymoon Avenue",
+        //         album: "Yours Truly",
+        //         artist: "Ariana Grande"
+        //     },
+        //     {
+        //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Judas_-_Lady_Gaga.mp4?raw=true",
+        //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Born_This_Way.jpg?raw=true",
+        //         title: "Judas",
+        //         album: "Born This Way",
+        //         artist: "Lady Gaga"
+        //     },
+        //     {
+        //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Rolling_In_The_Deep_-_Adele.mp4?raw=true",
+        //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/21.jpg?raw=true",
+        //         title: "Rolling In The Deep",
+        //         album: "21",
+        //         artist: "Adele"
+        //     },
+        //     {
+        //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Getaway_Car_-_Taylor_Swift.mp4?raw=true",
+        //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/reputation.jpg?raw=true",
+        //         title: "Getaway Car",
+        //         album: "reputation",
+        //         artist: "Taylor Swift"
+        //     },
+        //     {
+        //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Cruel_Summer_-_Taylor_Swift.mp4?raw=true",
+        //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Lover.jpg?raw=true",
+        //         title: "Cruel Summer",
+        //         album: "Lover",
+        //         artist: "Taylor Swift"
+        //     },
+        //     {
+        //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/august_-_Taylor_Swift.mp4?raw=true",
+        //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/folklore.jpg?raw=true",
+        //         title: "august",
+        //         album: "folklore",
+        //         artist: "Taylor Swift"
+        //     },
+        //     {
+        //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/All_Too_Well_(10_Minute_Version)_(Taylor's_Version)_-_Taylor_Swift.mp4?raw=true",
+        //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Red_(Taylor's_Version).jpg?raw=true",
+        //         title: "All Too Well (10 Minute Version) (Taylor's Version)",
+        //         album: "Red (Taylor's Version)",
+        //         artist: "Taylor Swift"
+        //     }
+        // ];
+
+        // 初始化播放列表（内链版）
+        const videos = [
             {
-                videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/The_greatest_-_Lana_Del_Rey.mp4?raw=true",
-                coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Norman_Fucking_Rockwell!.jpg?raw=true",
+                videoUrl: "resource/VinylRecords/The_greatest_-_Lana_Del_Rey.mp4",
+                coverUrl: "resource/AlbumCovers/Norman_Fucking_Rockwell!.jpg",
                 title: "The greatest",
                 album: "Norman Fucking Rockwell!",
                 artist: "Lana Del Rey"
             },
             {
-                videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/A&W_-_Lana_Del_Rey.mp4?raw=true",
-                coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Did_you_know_that_there's_a_tunnel_under_Ocean_Blvd.jpg?raw=true",
+                videoUrl: "resource/VinylRecords/A&W_-_Lana_Del_Rey.mp4",
+                coverUrl: "resource/AlbumCovers/Did_you_know_that_there's_a_tunnel_under_Ocean_Blvd.jpg",
                 title: "A&W",
                 album: "Did you know that there's a tunnel under Ocean Blvd",
                 artist: "Lana Del Rey"
             },
             {
-                videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/34+35_-_Ariana_Grande.mp4?raw=true",
-                coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Positions.jpg?raw=true",
+                videoUrl: "resource/VinylRecords/34+35_-_Ariana_Grande.mp4",
+                coverUrl: "AlbumCovers/Positions.jpg",
                 title: "34+35",
                 album: "Positions",
                 artist: "Ariana Grande"
             },
             {
-                videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Honeymoon_Avenue_-_Ariana_Grande.mp4?raw=true",
-                coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Yours_Truly.jpg?raw=true",
+                videoUrl: "resource/VinylRecords/Honeymoon_Avenue_-_Ariana_Grande.mp4",
+                coverUrl: "resource/AlbumCovers/Yours_Truly.jpg",
                 title: "Honeymoon Avenue",
                 album: "Yours Truly",
                 artist: "Ariana Grande"
             },
             {
-                videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Judas_-_Lady_Gaga.mp4?raw=true",
-                coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Born_This_Way.jpg?raw=true",
+                videoUrl: "resource/VinylRecords/Judas_-_Lady_Gaga.mp4",
+                coverUrl: "resource/AlbumCovers/Born_This_Way.jpg",
                 title: "Judas",
                 album: "Born This Way",
                 artist: "Lady Gaga"
             },
             {
-                videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Rolling_In_The_Deep_-_Adele.mp4?raw=true",
-                coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/21.jpg?raw=true",
+                videoUrl: "resource/VinylRecords/Rolling_In_The_Deep_-_Adele.mp4",
+                coverUrl: "resource/AlbumCovers/21.jpg",
                 title: "Rolling In The Deep",
                 album: "21",
                 artist: "Adele"
             },
             {
-                videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Getaway_Car_-_Taylor_Swift.mp4?raw=true",
-                coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/reputation.jpg?raw=true",
+                videoUrl: "resource/VinylRecords/Getaway_Car_-_Taylor_Swift.mp4",
+                coverUrl: "resource/AlbumCovers/reputation.jpg",
                 title: "Getaway Car",
                 album: "reputation",
                 artist: "Taylor Swift"
             },
             {
-                videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Cruel_Summer_-_Taylor_Swift.mp4?raw=true",
-                coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Lover.jpg?raw=true",
+                videoUrl: "resource/VinylRecords/Cruel_Summer_-_Taylor_Swift.mp4",
+                coverUrl: "resource/AlbumCovers/Lover.jpg",
                 title: "Cruel Summer",
                 album: "Lover",
                 artist: "Taylor Swift"
             },
             {
-                videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/august_-_Taylor_Swift.mp4?raw=true",
-                coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/folklore.jpg?raw=true",
+                videoUrl: "resource/VinylRecords/august_-_Taylor_Swift.mp4",
+                coverUrl: "resource/AlbumCovers/folklore.jpg",
                 title: "august",
                 album: "folklore",
                 artist: "Taylor Swift"
             },
             {
-                videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/All_Too_Well_(10_Minute_Version)_(Taylor's_Version)_-_Taylor_Swift.mp4?raw=true",
-                coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Red_(Taylor's_Version).jpg?raw=true",
+                videoUrl: "resource/VinylRecords/All_Too_Well_(10_Minute_Version)_(Taylor's_Version)_-_Taylor_Swift.mp4",
+                coverUrl: "resource/AlbumCovers/Red_(Taylor's_Version).jpg",
                 title: "All Too Well (10 Minute Version) (Taylor's Version)",
                 album: "Red (Taylor's Version)",
                 artist: "Taylor Swift"
             }
         ];
+
+        // 打乱播放列表
+        // videos.sort(() => Math.random() - 0.5);
+
+        let currentCover = document.getElementById("cover");
+        currentCover.src = videos[0].coverUrl;
+        let currentTitle = document.getElementById("title");
+        currentTitle.innerText = videos[0].title;
+        let currentAlbum = document.getElementById("album");
+        currentAlbum.innerText = videos[0].album;
+        let currentArtist = document.getElementById("artist");
+        currentArtist.innerText = videos[0].artist;
+        let currentVideo = document.getElementById("video");
+        currentVideo.setAttribute("src", videos[0].videoUrl);
+        video.src = videos[0].videoUrl;
+
+        let videoList = document.getElementById("videoList");
+        for (let i = 1; i < videos.length; i++) {
+            let videoItem = document.createElement("li");
+            videoItem.innerText = videos[i].title;
+            videoItem.onclick = function () {
+                let video = document.getElementById("video");
+                video.src = videos[i].videoUrl;
+                currentCover.src = videos[i].coverUrl;
+                currentTitle.innerText = videos[i].title;
+                currentAlbum.innerText = videos[i].album;
+                currentArtist.innerText = videos[i].artist;
+                video.play();
+                document.getElementById("playPauseButton").innerText = "⏸️";
+            }
+            videoList.appendChild(videoItem);
+        }
+
     }
 
-    initPlayList();
+    // 切换声音状态
+    function toggleVolume() {
+        let video = document.getElementById("video");
+        if (video.muted) {
+            video.muted = false;
+            document.getElementById("volumeButton").innerText = "🔊";
+        } else {
+            video.muted = true;
+            document.getElementById("volumeButton").innerText = "🔇";
+        }
+    }
 
+    // 缩小播放器
+    function zoomOut() {
+        let video = document.getElementById("video");
+        if (video.width > 256 && video.height > 144) {
+            video.width = Math.max(video.width * 0.8, 256);
+            video.height = Math.max(video.height * 0.8, 144);
+        } else {
+            alert("已经缩小到最小尺寸！");
+        }
+    }
+
+    // 放大播放器
+    function zoomIn() {
+        let video = document.getElementById("video");
+        if (video.width < 1920 && video.height < 1080) {
+            video.width = Math.min(video.width * 1.25, 1920);
+            video.height = Math.min(video.height * 1.25, 1080);
+        } else {
+            alert("已经放大到最大尺寸！");
+        }
+    }
+
+    // 切换上一个视频
+    function prevVideo() {
+
+    }
+
+    // 切换下一个视频
+    function nextVideo() {
+
+    }
+
+    // 快进
+    function fastForward() {
+
+    }
+
+    // 快退
+    function rewind() {
+
+    }
+
+    // 播放/暂停
+    function playPause() {
+        let video = document.getElementById("video");
+        if (video.paused) {
+            video.play();
+            document.getElementById("playPauseButton").innerText = "⏸️";
+        } else {
+            video.pause();
+            document.getElementById("playPauseButton").innerText = "▶️";
+        }
+    }
+
+    // 全屏
+    function fullScreen() {
+        video.requestFullscreen();
+    }
+
+    initPlayer();
 
 </script>
 </html>

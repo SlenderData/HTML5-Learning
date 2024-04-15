@@ -50,102 +50,94 @@
         text-align: center;
     }
 </style>
-<!--<style>-->
-<!--    .video-player {-->
-<!--        position: relative;-->
-<!--        width: 640px;-->
-<!--        margin: auto;-->
-<!--        background: url('https://raw.githubusercontent.com/SlenderData/img/main/images/2023/07/23/01-40-06-b70fe2b48794dfbd1e554a46e64be935-gaga%E8%9B%99%E8%9B%99%E7%BB%B4%E5%B0%BCNew-6b6ad9.png') no-repeat;-->
-<!--        background-size: cover;-->
-<!--        padding: 20px;-->
-<!--        box-shadow: 0 0 20px #000;-->
-<!--    }-->
-
-<!--    video {-->
-<!--        display: block;-->
-<!--        width: 100%;-->
-<!--    }-->
-
-<!--    .controls {-->
-<!--        text-align: center;-->
-<!--        margin-top: 10px;-->
-<!--    }-->
-
-<!--    button {-->
-<!--        padding: 10px 20px;-->
-<!--        margin: 0 10px;-->
-<!--        background-color: #666;-->
-<!--        color: white;-->
-<!--        border: none;-->
-<!--        border-radius: 5px;-->
-<!--        cursor: pointer;-->
-<!--    }-->
-
-<!--    button:hover {-->
-<!--        background-color: #555;-->
-<!--    }-->
-<!--</style>-->
 <body>
 <div class="main">
     <div class="infoArea">
-        <h1>VideoPlayer</h1>
-        <p>这是一个简单的视频播放器，支持播放、暂停、静音、放大、缩小、快进和快退。</p>
-        <p>点击下方按钮即可进行操作。</p>
     </div>
     <div class="playerArea">
-        <video id="videoElement" width="640" height="360">
-
-            您的浏览器不支持视频标签。
-        </video>
-        <div class="controls">
-            <button onclick="togglePlayPause()">播放/暂停</button>
-            <button onclick="toggleMute()">静音</button>
-            <button onclick="changeSize(1.1)">放大</button>
-            <button onclick="changeSize(0.9)">缩小</button>
-            <!-- 实现快进和快退，你可以调整秒数来定义快进和快退的时间 -->
-            <button onclick="skip(-10)">快退10秒</button>
-            <button onclick="skip(10)">快进10秒</button>
-        </div>
     </div>
 </div>
-<!--<div class="video-player">-->
-<!--    <video id="videoElement" width="640" height="360">-->
-<!--        <source src="test.mp4" type="video/mp4">-->
-<!--        您的浏览器不支持视频标签。-->
-<!--    </video>-->
-<!--    <div class="controls">-->
-<!--        <button onclick="togglePlayPause()">播放/暂停</button>-->
-<!--        <button onclick="toggleMute()">静音</button>-->
-<!--        <button onclick="changeSize(1.1)">放大</button>-->
-<!--        <button onclick="changeSize(0.9)">缩小</button>-->
-<!--        &lt;!&ndash; 实现快进和快退，你可以调整秒数来定义快进和快退的时间 &ndash;&gt;-->
-<!--        <button onclick="skip(-10)">快退10秒</button>-->
-<!--        <button onclick="skip(10)">快进10秒</button>-->
-<!--    </div>-->
-<!--</div>-->
 </body>
 <script>
-    var video = document.getElementById('videoElement');
 
-    function togglePlayPause() {
-        if (video.paused) {
-            video.play();
-        } else {
-            video.pause();
-        }
+    // 初始化播放列表
+    function initPlayList() {
+        let videos = [
+            {
+                videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/The_greatest_-_Lana_Del_Rey.mp4?raw=true",
+                coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Norman_Fucking_Rockwell!.jpg?raw=true",
+                title: "The greatest",
+                album: "Norman Fucking Rockwell!",
+                artist: "Lana Del Rey"
+            },
+            {
+                videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/A&W_-_Lana_Del_Rey.mp4?raw=true",
+                coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Did_you_know_that_there's_a_tunnel_under_Ocean_Blvd.jpg?raw=true",
+                title: "A&W",
+                album: "Did you know that there's a tunnel under Ocean Blvd",
+                artist: "Lana Del Rey"
+            },
+            {
+                videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/34+35_-_Ariana_Grande.mp4?raw=true",
+                coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Positions.jpg?raw=true",
+                title: "34+35",
+                album: "Positions",
+                artist: "Ariana Grande"
+            },
+            {
+                videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Honeymoon_Avenue_-_Ariana_Grande.mp4?raw=true",
+                coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Yours_Truly.jpg?raw=true",
+                title: "Honeymoon Avenue",
+                album: "Yours Truly",
+                artist: "Ariana Grande"
+            },
+            {
+                videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Judas_-_Lady_Gaga.mp4?raw=true",
+                coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Born_This_Way.jpg?raw=true",
+                title: "Judas",
+                album: "Born This Way",
+                artist: "Lady Gaga"
+            },
+            {
+                videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Rolling_In_The_Deep_-_Adele.mp4?raw=true",
+                coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/21.jpg?raw=true",
+                title: "Rolling In The Deep",
+                album: "21",
+                artist: "Adele"
+            },
+            {
+                videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Getaway_Car_-_Taylor_Swift.mp4?raw=true",
+                coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/reputation.jpg?raw=true",
+                title: "Getaway Car",
+                album: "reputation",
+                artist: "Taylor Swift"
+            },
+            {
+                videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Cruel_Summer_-_Taylor_Swift.mp4?raw=true",
+                coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Lover.jpg?raw=true",
+                title: "Cruel Summer",
+                album: "Lover",
+                artist: "Taylor Swift"
+            },
+            {
+                videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/august_-_Taylor_Swift.mp4?raw=true",
+                coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/folklore.jpg?raw=true",
+                title: "august",
+                album: "folklore",
+                artist: "Taylor Swift"
+            },
+            {
+                videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/All_Too_Well_(10_Minute_Version)_(Taylor's_Version)_-_Taylor_Swift.mp4?raw=true",
+                coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Red_(Taylor's_Version).jpg?raw=true",
+                title: "All Too Well (10 Minute Version) (Taylor's Version)",
+                album: "Red (Taylor's Version)",
+                artist: "Taylor Swift"
+            }
+        ];
     }
 
-    function toggleMute() {
-        video.muted = !video.muted;
-    }
+    initPlayList();
 
-    function changeSize(scale) {
-        video.width = video.width * scale;
-        video.height = video.height * scale;
-    }
 
-    function skip(time) {
-        video.currentTime += time;
-    }
 </script>
 </html>

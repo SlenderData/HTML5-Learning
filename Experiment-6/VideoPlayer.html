@@ -5,56 +5,124 @@
     <title>VideoPlayer</title>
 </head>
 <style>
-    .video-player {
-        position: relative;
-        width: 640px;
-        margin: auto;
-        background: url('https://raw.githubusercontent.com/SlenderData/img/main/images/2023/07/23/01-40-06-b70fe2b48794dfbd1e554a46e64be935-gaga%E8%9B%99%E8%9B%99%E7%BB%B4%E5%B0%BCNew-6b6ad9.png') no-repeat;
-        background-size: cover;
-        padding: 20px;
-        box-shadow: 0 0 20px #000;
-    }
-
-    video {
-        display: block;
-        width: 100%;
-    }
-
-    .controls {
-        text-align: center;
-        margin-top: 10px;
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang SC", Arial, sans-serif;
+        background-color: #D6E4E5;
+        color: #333;
+        padding: 0;
+        margin: 0;
     }
 
     button {
-        padding: 10px 20px;
-        margin: 0 10px;
-        background-color: #666;
-        color: white;
+        font-size: 1.1em;
+        font-weight: bold;
+        background-color: #D6E4E5;
         border: none;
-        border-radius: 5px;
+        border-radius: 10px;
         cursor: pointer;
+        padding: 10px;
+        margin: 0 20px 0 20px;
     }
 
-    button:hover {
-        background-color: #555;
+    .main {
+        display: grid;
+        grid-template-columns: 450px auto;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .infoArea {
+        background-color: #EFF5F5;
+        border-radius: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        margin: 50px 0 0 50px;
+        padding: 20px;
+        float: left;
+    }
+
+    .playerArea {
+        background-color: #EFF5F5;
+        border-radius: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        margin: 50px;
+        padding: 20px;
+        float: left;
+        text-align: center;
     }
 </style>
+<!--<style>-->
+<!--    .video-player {-->
+<!--        position: relative;-->
+<!--        width: 640px;-->
+<!--        margin: auto;-->
+<!--        background: url('https://raw.githubusercontent.com/SlenderData/img/main/images/2023/07/23/01-40-06-b70fe2b48794dfbd1e554a46e64be935-gaga%E8%9B%99%E8%9B%99%E7%BB%B4%E5%B0%BCNew-6b6ad9.png') no-repeat;-->
+<!--        background-size: cover;-->
+<!--        padding: 20px;-->
+<!--        box-shadow: 0 0 20px #000;-->
+<!--    }-->
+
+<!--    video {-->
+<!--        display: block;-->
+<!--        width: 100%;-->
+<!--    }-->
+
+<!--    .controls {-->
+<!--        text-align: center;-->
+<!--        margin-top: 10px;-->
+<!--    }-->
+
+<!--    button {-->
+<!--        padding: 10px 20px;-->
+<!--        margin: 0 10px;-->
+<!--        background-color: #666;-->
+<!--        color: white;-->
+<!--        border: none;-->
+<!--        border-radius: 5px;-->
+<!--        cursor: pointer;-->
+<!--    }-->
+
+<!--    button:hover {-->
+<!--        background-color: #555;-->
+<!--    }-->
+<!--</style>-->
 <body>
-<div class="video-player">
-    <video id="videoElement" width="640" height="360">
-        <source src="test.mp4" type="video/mp4">
-        您的浏览器不支持视频标签。
-    </video>
-    <div class="controls">
-        <button onclick="togglePlayPause()">播放/暂停</button>
-        <button onclick="toggleMute()">静音</button>
-        <button onclick="changeSize(1.1)">放大</button>
-        <button onclick="changeSize(0.9)">缩小</button>
-        <!-- 实现快进和快退，你可以调整秒数来定义快进和快退的时间 -->
-        <button onclick="skip(-10)">快退10秒</button>
-        <button onclick="skip(10)">快进10秒</button>
+<div class="main">
+    <div class="infoArea">
+        <h1>VideoPlayer</h1>
+        <p>这是一个简单的视频播放器，支持播放、暂停、静音、放大、缩小、快进和快退。</p>
+        <p>点击下方按钮即可进行操作。</p>
+    </div>
+    <div class="playerArea">
+        <video id="videoElement" width="640" height="360">
+
+            您的浏览器不支持视频标签。
+        </video>
+        <div class="controls">
+            <button onclick="togglePlayPause()">播放/暂停</button>
+            <button onclick="toggleMute()">静音</button>
+            <button onclick="changeSize(1.1)">放大</button>
+            <button onclick="changeSize(0.9)">缩小</button>
+            <!-- 实现快进和快退，你可以调整秒数来定义快进和快退的时间 -->
+            <button onclick="skip(-10)">快退10秒</button>
+            <button onclick="skip(10)">快进10秒</button>
+        </div>
     </div>
 </div>
+<!--<div class="video-player">-->
+<!--    <video id="videoElement" width="640" height="360">-->
+<!--        <source src="test.mp4" type="video/mp4">-->
+<!--        您的浏览器不支持视频标签。-->
+<!--    </video>-->
+<!--    <div class="controls">-->
+<!--        <button onclick="togglePlayPause()">播放/暂停</button>-->
+<!--        <button onclick="toggleMute()">静音</button>-->
+<!--        <button onclick="changeSize(1.1)">放大</button>-->
+<!--        <button onclick="changeSize(0.9)">缩小</button>-->
+<!--        &lt;!&ndash; 实现快进和快退，你可以调整秒数来定义快进和快退的时间 &ndash;&gt;-->
+<!--        <button onclick="skip(-10)">快退10秒</button>-->
+<!--        <button onclick="skip(10)">快进10秒</button>-->
+<!--    </div>-->
+<!--</div>-->
 </body>
 <script>
     var video = document.getElementById('videoElement');

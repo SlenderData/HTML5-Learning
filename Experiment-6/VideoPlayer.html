@@ -26,7 +26,7 @@
 
     .main {
         display: grid;
-        grid-template-columns: 450px auto;
+        grid-template-columns: auto auto;
         justify-content: center;
         padding: 20px;
     }
@@ -38,8 +38,11 @@
         margin-left: 20px;
         margin-top: 20px;
         padding: 10px;
+        padding-bottom: 1em;
         float: left;
         text-align: center;
+        height: fit-content;
+        width: fit-content;
     }
 
     #videoList {
@@ -70,7 +73,8 @@
 
     video {
         border-radius: 15px;
-        background: rgba(0, 0, 0, 0.1);
+        background-image: url("resource/Loading.png");
+        background-size: 100% 100%;
     }
 
 </style>
@@ -130,9 +134,9 @@
             <button id="volumeButton" onclick="toggleVolume()">🔊</button>
             <button id="zoomOutButton" onclick="zoomOut()">➖</button>
             <button id="prevButton" onclick="prevVideo()">⏮️</button>
-            <button id="rewindButton" onclick="rewind()">⏪</button>
+            <button id="rewindButton" onclick="rewind(10)">⏪</button>
             <button id="playPauseButton" onclick="playPause()">▶️</button>
-            <button id="fastForwardButton" onclick="fastForward()">⏩</button>
+            <button id="fastForwardButton" onclick="fastForward(10)">⏩</button>
             <button id="nextButton" onclick="nextVideo()">⏭️</button>
             <button id="zoomInButton" onclick="zoomIn()">➕</button>
             <button id="fullScreenButton" onclick="fullScreen()">全屏</button>
@@ -141,190 +145,233 @@
 </div>
 </body>
 <script>
+    // // 初始化播放列表（外链版）
+    // const videos = [
+    //     {
+    //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/The_greatest_-_Lana_Del_Rey.mp4?raw=true",
+    //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Norman_Fucking_Rockwell!.jpg?raw=true",
+    //         title: "The greatest",
+    //         album: "Norman Fucking Rockwell!",
+    //         artist: "Lana Del Rey"
+    //     },
+    //     {
+    //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/A&W_-_Lana_Del_Rey.mp4?raw=true",
+    //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Did_you_know_that_there's_a_tunnel_under_Ocean_Blvd.jpg?raw=true",
+    //         title: "A&W",
+    //         album: "Did you know that there's a tunnel under Ocean Blvd",
+    //         artist: "Lana Del Rey"
+    //     },
+    //     {
+    //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/34+35_-_Ariana_Grande.mp4?raw=true",
+    //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Positions.jpg?raw=true",
+    //         title: "34+35",
+    //         album: "Positions",
+    //         artist: "Ariana Grande"
+    //     },
+    //     {
+    //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Honeymoon_Avenue_-_Ariana_Grande.mp4?raw=true",
+    //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Yours_Truly.jpg?raw=true",
+    //         title: "Honeymoon Avenue",
+    //         album: "Yours Truly",
+    //         artist: "Ariana Grande"
+    //     },
+    //     {
+    //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Judas_-_Lady_Gaga.mp4?raw=true",
+    //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Born_This_Way.jpg?raw=true",
+    //         title: "Judas",
+    //         album: "Born This Way",
+    //         artist: "Lady Gaga"
+    //     },
+    //     {
+    //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Rolling_In_The_Deep_-_Adele.mp4?raw=true",
+    //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/21.jpg?raw=true",
+    //         title: "Rolling In The Deep",
+    //         album: "21",
+    //         artist: "Adele"
+    //     },
+    //     {
+    //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Getaway_Car_-_Taylor_Swift.mp4?raw=true",
+    //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/reputation.jpg?raw=true",
+    //         title: "Getaway Car",
+    //         album: "reputation",
+    //         artist: "Taylor Swift"
+    //     },
+    //     {
+    //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Cruel_Summer_-_Taylor_Swift.mp4?raw=true",
+    //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Lover.jpg?raw=true",
+    //         title: "Cruel Summer",
+    //         album: "Lover",
+    //         artist: "Taylor Swift"
+    //     },
+    //     {
+    //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/august_-_Taylor_Swift.mp4?raw=true",
+    //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/folklore.jpg?raw=true",
+    //         title: "august",
+    //         album: "folklore",
+    //         artist: "Taylor Swift"
+    //     },
+    //     {
+    //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/All_Too_Well_(10_Minute_Version)_(Taylor's_Version)_-_Taylor_Swift.mp4?raw=true",
+    //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Red_(Taylor's_Version).jpg?raw=true",
+    //         title: "All Too Well (10 Minute Version) (Taylor's Version)",
+    //         album: "Red (Taylor's Version)",
+    //         artist: "Taylor Swift"
+    //     }
+    // ];
+
+    // 初始化播放列表（内链版）
+    const videos = [
+        {
+            videoUrl: "resource/VinylRecords/The_greatest_-_Lana_Del_Rey.mp4",
+            coverUrl: "resource/AlbumCovers/Norman_Fucking_Rockwell!.jpg",
+            title: "The greatest",
+            album: "Norman Fucking Rockwell!",
+            artist: "Lana Del Rey"
+        },
+        {
+            videoUrl: "resource/VinylRecords/A&W_-_Lana_Del_Rey.mp4",
+            coverUrl: "resource/AlbumCovers/Did_you_know_that_there's_a_tunnel_under_Ocean_Blvd.jpg",
+            title: "A&W",
+            album: "Did you know that there's a tunnel under Ocean Blvd",
+            artist: "Lana Del Rey"
+        },
+        {
+            videoUrl: "resource/VinylRecords/34+35_-_Ariana_Grande.mp4",
+            coverUrl: "resource/AlbumCovers/Positions.jpg",
+            title: "34+35",
+            album: "Positions",
+            artist: "Ariana Grande"
+        },
+        {
+            videoUrl: "resource/VinylRecords/Honeymoon_Avenue_-_Ariana_Grande.mp4",
+            coverUrl: "resource/AlbumCovers/Yours_Truly.jpg",
+            title: "Honeymoon Avenue",
+            album: "Yours Truly",
+            artist: "Ariana Grande"
+        },
+        {
+            videoUrl: "resource/VinylRecords/Judas_-_Lady_Gaga.mp4",
+            coverUrl: "resource/AlbumCovers/Born_This_Way.jpg",
+            title: "Judas",
+            album: "Born This Way",
+            artist: "Lady Gaga"
+        },
+        {
+            videoUrl: "resource/VinylRecords/Rolling_In_The_Deep_-_Adele.mp4",
+            coverUrl: "resource/AlbumCovers/21.jpg",
+            title: "Rolling In The Deep",
+            album: "21",
+            artist: "Adele"
+        },
+        {
+            videoUrl: "resource/VinylRecords/Getaway_Car_-_Taylor_Swift.mp4",
+            coverUrl: "resource/AlbumCovers/reputation.jpg",
+            title: "Getaway Car",
+            album: "reputation",
+            artist: "Taylor Swift"
+        },
+        {
+            videoUrl: "resource/VinylRecords/Cruel_Summer_-_Taylor_Swift.mp4",
+            coverUrl: "resource/AlbumCovers/Lover.jpg",
+            title: "Cruel Summer",
+            album: "Lover",
+            artist: "Taylor Swift"
+        },
+        {
+            videoUrl: "resource/VinylRecords/august_-_Taylor_Swift.mp4",
+            coverUrl: "resource/AlbumCovers/folklore.jpg",
+            title: "august",
+            album: "folklore",
+            artist: "Taylor Swift"
+        },
+        {
+            videoUrl: "resource/VinylRecords/All_Too_Well_(10_Minute_Version)_(Taylor's_Version)_-_Taylor_Swift.mp4",
+            coverUrl: "resource/AlbumCovers/Red_(Taylor's_Version).jpg",
+            title: "All Too Well (10 Minute Version) (Taylor's Version)",
+            album: "Red (Taylor's Version)",
+            artist: "Taylor Swift"
+        }
+    ];
+
+    // 打乱播放列表
+    videos.sort(() => Math.random() - 0.5);
+
     // 初始化
     function initPlayer() {
-
-        // // 初始化播放列表（外链版）
-        // const videos = [
-        //     {
-        //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/The_greatest_-_Lana_Del_Rey.mp4?raw=true",
-        //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Norman_Fucking_Rockwell!.jpg?raw=true",
-        //         title: "The greatest",
-        //         album: "Norman Fucking Rockwell!",
-        //         artist: "Lana Del Rey"
-        //     },
-        //     {
-        //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/A&W_-_Lana_Del_Rey.mp4?raw=true",
-        //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Did_you_know_that_there's_a_tunnel_under_Ocean_Blvd.jpg?raw=true",
-        //         title: "A&W",
-        //         album: "Did you know that there's a tunnel under Ocean Blvd",
-        //         artist: "Lana Del Rey"
-        //     },
-        //     {
-        //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/34+35_-_Ariana_Grande.mp4?raw=true",
-        //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Positions.jpg?raw=true",
-        //         title: "34+35",
-        //         album: "Positions",
-        //         artist: "Ariana Grande"
-        //     },
-        //     {
-        //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Honeymoon_Avenue_-_Ariana_Grande.mp4?raw=true",
-        //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Yours_Truly.jpg?raw=true",
-        //         title: "Honeymoon Avenue",
-        //         album: "Yours Truly",
-        //         artist: "Ariana Grande"
-        //     },
-        //     {
-        //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Judas_-_Lady_Gaga.mp4?raw=true",
-        //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Born_This_Way.jpg?raw=true",
-        //         title: "Judas",
-        //         album: "Born This Way",
-        //         artist: "Lady Gaga"
-        //     },
-        //     {
-        //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Rolling_In_The_Deep_-_Adele.mp4?raw=true",
-        //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/21.jpg?raw=true",
-        //         title: "Rolling In The Deep",
-        //         album: "21",
-        //         artist: "Adele"
-        //     },
-        //     {
-        //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Getaway_Car_-_Taylor_Swift.mp4?raw=true",
-        //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/reputation.jpg?raw=true",
-        //         title: "Getaway Car",
-        //         album: "reputation",
-        //         artist: "Taylor Swift"
-        //     },
-        //     {
-        //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/Cruel_Summer_-_Taylor_Swift.mp4?raw=true",
-        //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Lover.jpg?raw=true",
-        //         title: "Cruel Summer",
-        //         album: "Lover",
-        //         artist: "Taylor Swift"
-        //     },
-        //     {
-        //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/august_-_Taylor_Swift.mp4?raw=true",
-        //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/folklore.jpg?raw=true",
-        //         title: "august",
-        //         album: "folklore",
-        //         artist: "Taylor Swift"
-        //     },
-        //     {
-        //         videoUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/VinylRecords/All_Too_Well_(10_Minute_Version)_(Taylor's_Version)_-_Taylor_Swift.mp4?raw=true",
-        //         coverUrl: "https://github.com/SlenderData/HTML5-Learning/blob/main/Experiment-6/resource/AlbumCovers/Red_(Taylor's_Version).jpg?raw=true",
-        //         title: "All Too Well (10 Minute Version) (Taylor's Version)",
-        //         album: "Red (Taylor's Version)",
-        //         artist: "Taylor Swift"
-        //     }
-        // ];
-
-        // 初始化播放列表（内链版）
-        const videos = [
-            {
-                videoUrl: "resource/VinylRecords/The_greatest_-_Lana_Del_Rey.mp4",
-                coverUrl: "resource/AlbumCovers/Norman_Fucking_Rockwell!.jpg",
-                title: "The greatest",
-                album: "Norman Fucking Rockwell!",
-                artist: "Lana Del Rey"
-            },
-            {
-                videoUrl: "resource/VinylRecords/A&W_-_Lana_Del_Rey.mp4",
-                coverUrl: "resource/AlbumCovers/Did_you_know_that_there's_a_tunnel_under_Ocean_Blvd.jpg",
-                title: "A&W",
-                album: "Did you know that there's a tunnel under Ocean Blvd",
-                artist: "Lana Del Rey"
-            },
-            {
-                videoUrl: "resource/VinylRecords/34+35_-_Ariana_Grande.mp4",
-                coverUrl: "resource/AlbumCovers/Positions.jpg",
-                title: "34+35",
-                album: "Positions",
-                artist: "Ariana Grande"
-            },
-            {
-                videoUrl: "resource/VinylRecords/Honeymoon_Avenue_-_Ariana_Grande.mp4",
-                coverUrl: "resource/AlbumCovers/Yours_Truly.jpg",
-                title: "Honeymoon Avenue",
-                album: "Yours Truly",
-                artist: "Ariana Grande"
-            },
-            {
-                videoUrl: "resource/VinylRecords/Judas_-_Lady_Gaga.mp4",
-                coverUrl: "resource/AlbumCovers/Born_This_Way.jpg",
-                title: "Judas",
-                album: "Born This Way",
-                artist: "Lady Gaga"
-            },
-            {
-                videoUrl: "resource/VinylRecords/Rolling_In_The_Deep_-_Adele.mp4",
-                coverUrl: "resource/AlbumCovers/21.jpg",
-                title: "Rolling In The Deep",
-                album: "21",
-                artist: "Adele"
-            },
-            {
-                videoUrl: "resource/VinylRecords/Getaway_Car_-_Taylor_Swift.mp4",
-                coverUrl: "resource/AlbumCovers/reputation.jpg",
-                title: "Getaway Car",
-                album: "reputation",
-                artist: "Taylor Swift"
-            },
-            {
-                videoUrl: "resource/VinylRecords/Cruel_Summer_-_Taylor_Swift.mp4",
-                coverUrl: "resource/AlbumCovers/Lover.jpg",
-                title: "Cruel Summer",
-                album: "Lover",
-                artist: "Taylor Swift"
-            },
-            {
-                videoUrl: "resource/VinylRecords/august_-_Taylor_Swift.mp4",
-                coverUrl: "resource/AlbumCovers/folklore.jpg",
-                title: "august",
-                album: "folklore",
-                artist: "Taylor Swift"
-            },
-            {
-                videoUrl: "resource/VinylRecords/All_Too_Well_(10_Minute_Version)_(Taylor's_Version)_-_Taylor_Swift.mp4",
-                coverUrl: "resource/AlbumCovers/Red_(Taylor's_Version).jpg",
-                title: "All Too Well (10 Minute Version) (Taylor's Version)",
-                album: "Red (Taylor's Version)",
-                artist: "Taylor Swift"
-            }
-        ];
-
-        // 打乱播放列表
-        videos.sort(() => Math.random() - 0.5);
-
         let currentCover = document.getElementById("cover");
-        currentCover.src = videos[0].coverUrl;
         let currentTitle = document.getElementById("title");
-        currentTitle.innerText = videos[0].title;
         let currentAlbum = document.getElementById("album");
-        currentAlbum.innerText = videos[0].album;
         let currentArtist = document.getElementById("artist");
-        currentArtist.innerText = videos[0].artist;
         let currentVideo = document.getElementById("video");
+        currentCover.src = videos[0].coverUrl;
+        currentTitle.innerText = videos[0].title;
+        currentAlbum.innerText = videos[0].album;
+        currentArtist.innerText = videos[0].artist;
         currentVideo.src = videos[0].videoUrl;
+        // 更新播放列表
+        updateVideoList();
+        // 对video元素添加事件监听，如果结束就播放下一个视频
+        currentVideo.addEventListener("ended", function () {
+            nextVideo();
+        });
+        // 对video的音量添加事件监听
+        currentVideo.addEventListener("volumechange", function () {
+            if (currentVideo.muted) {
+                document.getElementById("volumeButton").innerText = "🔇";
+            } else {
+                document.getElementById("volumeButton").innerText = "🔊";
+            }
+        });
+        // 对video的播放状态添加事件监听
+        currentVideo.addEventListener("play", function () {
+            document.getElementById("playPauseButton").innerText = "⏸️";
+        });
+        currentVideo.addEventListener("pause", function () {
+            document.getElementById("playPauseButton").innerText = "▶️";
+        });
+    }
 
+    initPlayer();
+
+    // 切换视频
+    function switchVideo(index, flag) {
+        if (flag) {
+            videos.unshift(videos.splice(index, 1)[0]);
+        } else {
+            videos.push(videos.shift());
+            videos.unshift(videos.splice(index - 1, 1)[0]);
+        }
+        let video = document.getElementById("video");
+        let currentCover = document.getElementById("cover");
+        let currentTitle = document.getElementById("title");
+        let currentAlbum = document.getElementById("album");
+        let currentArtist = document.getElementById("artist");
+        currentCover.src = videos[0].coverUrl;
+        currentTitle.innerText = videos[0].title;
+        currentAlbum.innerText = videos[0].album;
+        currentArtist.innerText = videos[0].artist;
+        video.src = videos[0].videoUrl;
+        updateVideoList();
+        video.play();
+    }
+
+    // 更新播放列表
+    function updateVideoList() {
         let videoList = document.getElementById("videoList");
         for (let i = 1; i < videos.length; i++) {
             let row = videoList.rows[i - 1];
             row.cells[1].innerText = videos[i].title;
             row.cells[1].title = videos[i].title;
+            row.cells[1].onclick = function () {
+                switchVideo(i, false);
+            };
         }
-
     }
 
     // 切换声音状态
     function toggleVolume() {
         let video = document.getElementById("video");
-        if (video.muted) {
-            video.muted = false;
-            document.getElementById("volumeButton").innerText = "🔊";
-        } else {
-            video.muted = true;
-            document.getElementById("volumeButton").innerText = "🔇";
-        }
+        video.muted = !video.muted;
     }
 
     // 缩小播放器
@@ -341,7 +388,7 @@
     // 放大播放器
     function zoomIn() {
         let video = document.getElementById("video");
-        if (video.width < 1360 && video.height < 810) {
+        if (video.width < 1360 && video.height < 765) {
             video.width = Math.min(video.width * 1.25, 1360);
             video.height = Math.min(video.height * 1.25, 765);
         } else {
@@ -351,22 +398,24 @@
 
     // 切换上一个视频
     function prevVideo() {
-
+        switchVideo(videos.length - 1, true);
     }
 
     // 切换下一个视频
     function nextVideo() {
-
+        switchVideo(1, false);
     }
 
     // 快进
-    function fastForward() {
-
+    function fastForward(seconds) {
+        let video = document.getElementById("video");
+        video.currentTime += seconds;
     }
 
     // 快退
-    function rewind() {
-
+    function rewind(seconds) {
+        let video = document.getElementById("video");
+        video.currentTime -= seconds;
     }
 
     // 播放/暂停
@@ -374,10 +423,8 @@
         let video = document.getElementById("video");
         if (video.paused) {
             video.play();
-            document.getElementById("playPauseButton").innerText = "⏸️";
         } else {
             video.pause();
-            document.getElementById("playPauseButton").innerText = "▶️";
         }
     }
 
@@ -385,8 +432,6 @@
     function fullScreen() {
         video.requestFullscreen();
     }
-
-    initPlayer();
 
 </script>
 </html>

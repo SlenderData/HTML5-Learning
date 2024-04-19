@@ -92,3 +92,25 @@ HTML5 编程的课程作业
 ### 在线预览
 
 [点击这里](https://slenderdata.github.io/HTML5-Learning/Experiment-5/CanvasChart.html)
+
+## 实验六：视频播放器设计
+
+### 实验目的
+
+1. 熟悉使用媒体API
+2. 熟悉按钮响应事件
+
+### 实验要求
+
+在网页中设计一款视频播放器，要求不使用自带控制面板，通过自定义按钮，实现以下功能：
+
+1. 播放、暂停、静音等功能；
+2. 视频放大和缩小；
+3. 播放上一个和下一个文件；
+4. 快进和快退功能。
+
+其他功能可自行设计，界面尽量做到美观大方，可插入背景图片。
+
+### 在线预览
+
+[点击这里](https://slenderdata.github.io/HTML5-Learning/Experiment-6/VideoPlayer.html)

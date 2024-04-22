@@ -69,11 +69,6 @@
         border-radius: 0 10px 10px 0;
     }
 
-    #today {
-        background-color: #EB6440;
-        color: #EFF5F5;
-        border-radius: 10px;
-    }
 </style>
 <body>
 <div id="calendar">
@@ -115,7 +110,7 @@
             const dayDiv = document.createElement('div');
             dayDiv.textContent = day;
             if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
-                dayDiv.id = 'today';
+                dayDiv.style = 'background-color: #EB6440; color: #EFF5F5; border-radius: 10px;';
             }
             daysElement.appendChild(dayDiv);
         }

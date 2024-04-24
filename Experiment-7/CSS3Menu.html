@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>CSS3Menu</title>
+</head>
+<style>
+    @font-face {
+        font-family: "big-caslon-fb";
+        src: url("resource/font/big-caslon-fb-700.woff2") format("woff2"),url("resource/font/big-caslon-fb-700.woff") format("woff");
+        font-display: auto;
+        font-style: normal;
+        font-weight: 700;
+        font-stretch: normal
+    }
+
+    @font-face {
+        font-family: "big-caslon-fb";
+        src: url("resource/font/big-caslon-fb-400.woff2") format("woff2"),url("resource/font/big-caslon-fb-400.woff") format("woff");
+        font-display: auto;
+        font-style: normal;
+        font-weight: 400;
+        font-stretch: normal
+    }
+
+    body {
+        font-family: "big-caslon-fb", -apple-system, "Helvetica Neue", "PingFang SC", "Apple Color Emoji", "Segoe UI Emoji", BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        color: #333;
+        background-color: #6E685E;
+        background-image: url("resource/background.png");
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+        letter-spacing: 0.1em;
+    }
+
+    .main {
+        display: grid;
+        grid-template-columns: auto auto;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .info {
+        background-color: rgba(255, 255, 255, 0.45);
+        border-radius: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        margin: 20px;
+        padding: 20px;
+        width: fit-content;
+        height: fit-content;
+        text-align: center;
+        font-weight: 700;
+    }
+
+    .tracks {
+        background-color: rgba(255, 255, 255, 0.45);
+        border-radius: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        margin: 20px;
+        padding: 20px;
+        width: fit-content;
+        height: fit-content;
+        font-weight: 400;
+    }
+
+</style>
+<body>
+<div class="main">
+    <div class="info">
+        <img src="resource/cover.jpg" id="cover" alt="Cover" style="width: 400px; height: 400px; border-radius: 15px;">
+        <h1 style="margin-bottom: 0.2em; letter-spacing: 0.05em;">THE TORTURED<br>POETS DEPARTMENT</h1>
+        <h2 style="margin-top: 0; letter-spacing: 0.2em;">THE ANTHOLOGY</h2>
+        <h2>Taylor Swift</h2>
+    </div>
+    <div class="tracks">
+        <h2>Track List</h2>
+
+    </div>
+</div>
+</body>
+</html>

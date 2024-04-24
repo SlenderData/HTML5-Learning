@@ -114,3 +114,22 @@ HTML5 编程的课程作业
 ### 在线预览
 
 [点击这里](https://slenderdata.github.io/HTML5-Learning/Experiment-6/VideoPlayer.html)
+
+## 实验七：响应式放大悬浮菜单
+
+### 实验目的
+
+1. 熟悉 CSS3 transition 动画过程
+2. 熟悉 CSS3 阴影效果的使用
+
+### 实验要求
+
+利用 CSS3 动画技术制作响应式放大悬浮菜单，具体要求：
+
+1. 在网页中添加多个菜单，菜单文字内容自定；
+2. 在用户鼠标悬浮于菜单上方后，菜单动画放大；
+3. 放大后的菜单添加阴影使其悬浮于页面之上，具有立体感。
+
+### 在线预览
+
+[点击这里](https://slenderdata.github.io/HTML5-Learning/Experiment-7/CSS3Menu.html)

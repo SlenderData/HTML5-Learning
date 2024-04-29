@@ -21,8 +21,8 @@
         border-radius: 10px;
         cursor: pointer;
         padding: 10px;
-        margin: 0 20px 0 20px;
-        min-width: 6em;
+        margin: 20px;
+        text-align: center;
     }
 
     #main {
@@ -49,15 +49,13 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         margin: 50px;
         padding: 20px;
-        height: 280px;
-        width: 280px;
+        height: 240px;
+        width: 240px;
         float: left;
     }
 
     #gameArea div {
         float: left;
-        width: 20px;
-        height: 20px;
         background-color: #eee;
     }
 </style>
@@ -68,26 +66,37 @@
         <h3 style="text-align: center;">当前得分：<span id="score">0</span></h3>
         <table>
             <tr>
-                <td><label for="speed">刷新速度（ms）：</label></td>
+                <td style="text-align: right;"><label for="speed">刷新速度（ms）：</label></td>
                 <td><input type="number" id="speed" value="800"></td>
             </tr>
             <tr>
-                <td><label for="gameAreaWidth">宽度（格）：</label></td>
-                <td><input type="number" id="gameAreaWidth" value="10"></td>
+                <td style="text-align: right;"><label for="cellLength">格子边长（px）：</label></td>
+                <td><input type="number" id="cellLength" value="20"></td>
                 <script>
-                    // 设置游戏区域宽度
-                    document.getElementById("gameAreaWidth").addEventListener("change", function () {
-                        document.getElementById("gameArea").style.width = (this.value + 2) * 20 + 40 + "px";
+                    // 设置格子边长
+                    document.getElementById("cellLength").addEventListener("change", function () {
+                        document.getElementById("gameArea").style.width = (parseInt(document.getElementById("gameAreaWidth").value) + 2) * parseInt(this.value) + "px";
+                        document.getElementById("gameArea").style.height = (parseInt(document.getElementById("gameAreaHeight").value) + 2) * parseInt(this.value) + "px";
                     });
                 </script>
             </tr>
             <tr>
-                <td><label for="gameAreaHeight">高度（格）：</label></td>
+                <td style="text-align: right;"><label for="gameAreaWidth">宽度（格）：</label></td>
+                <td><input type="number" id="gameAreaWidth" value="10"></td>
+                <script>
+                    // 设置游戏区域宽度
+                    document.getElementById("gameAreaWidth").addEventListener("change", function () {
+                        document.getElementById("gameArea").style.width = (parseInt(this.value) + 2) * parseInt(document.getElementById("cellLength").value) + "px";
+                    });
+                </script>
+            </tr>
+            <tr>
+                <td style="text-align: right;"><label for="gameAreaHeight">高度（格）：</label></td>
                 <td><input type="number" id="gameAreaHeight" value="10"></td>
                 <script>
                     // 设置游戏区域高度
                     document.getElementById("gameAreaHeight").addEventListener("change", function () {
-                        document.getElementById("gameArea").style.height = (this.value + 2) * 20 + 40 + "px";
+                        document.getElementById("gameArea").style.height = (parseInt(this.value) + 2) * parseInt(document.getElementById("cellLength").value) + "px";
                     });
                 </script>
             </tr>

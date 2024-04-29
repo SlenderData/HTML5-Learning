@@ -49,25 +49,52 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         margin: 50px;
         padding: 20px;
-        height: fit-content;
-        width: fit-content;
+        height: 280px;
+        width: 280px;
         float: left;
+    }
+
+    #gameArea div {
+        float: left;
+        width: 20px;
+        height: 20px;
+        background-color: #eee;
     }
 </style>
 <body>
 <div id="main">
     <div id="inputArea">
-        <h1 style="text-align: center;">贪吃蛇游戏</h1><br>
-        <label for="speed">刷新速度（ms）：</label>
-        <input type="number" id="speed" value="1000" min="1"><br><br>
-        <label for="width">宽度（格）：</label>
-        <input type="number" id="width" value="20" min="10"><br><br>
-        <label for="height">高度（格）：</label>
-        <input type="number" id="height" value="20" min="10"><br><br>
+        <h1 style="text-align: center;">贪吃蛇游戏</h1>
+        <h3 style="text-align: center;">当前得分：<span id="score">0</span></h3>
+        <table>
+            <tr>
+                <td><label for="speed">刷新速度（ms）：</label></td>
+                <td><input type="number" id="speed" value="800"></td>
+            </tr>
+            <tr>
+                <td><label for="gameAreaWidth">宽度（格）：</label></td>
+                <td><input type="number" id="gameAreaWidth" value="10"></td>
+                <script>
+                    // 设置游戏区域宽度
+                    document.getElementById("gameAreaWidth").addEventListener("change", function () {
+                        document.getElementById("gameArea").style.width = (this.value + 2) * 20 + 40 + "px";
+                    });
+                </script>
+            </tr>
+            <tr>
+                <td><label for="gameAreaHeight">高度（格）：</label></td>
+                <td><input type="number" id="gameAreaHeight" value="10"></td>
+                <script>
+                    // 设置游戏区域高度
+                    document.getElementById("gameAreaHeight").addEventListener("change", function () {
+                        document.getElementById("gameArea").style.height = (this.value + 2) * 20 + 40 + "px";
+                    });
+                </script>
+            </tr>
+        </table>
         <button id="start">开始游戏</button>
     </div>
     <div id="gameArea">
-
     </div>
 </div>
 </body>

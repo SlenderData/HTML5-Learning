@@ -21,8 +21,9 @@
         border-radius: 10px;
         cursor: pointer;
         padding: 10px;
-        margin: 20px;
+        margin: 20px auto;
         text-align: center;
+        display: block;
     }
 
     #main {
@@ -49,9 +50,10 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         margin: 50px;
         padding: 20px;
-        height: 240px;
-        width: 240px;
+        height: fit-content;
+        width: fit-content;
         float: left;
+        white-space: nowrap;
     }
 
     #gameArea div {
@@ -71,34 +73,19 @@
             </tr>
             <tr>
                 <td style="text-align: right;"><label for="cellLength">格子边长（px）：</label></td>
-                <td><input type="number" id="cellLength" value="20"></td>
-                <script>
-                    // 设置格子边长
-                    document.getElementById("cellLength").addEventListener("change", function () {
-                        document.getElementById("gameArea").style.width = (parseInt(document.getElementById("gameAreaWidth").value) + 2) * parseInt(this.value) + "px";
-                        document.getElementById("gameArea").style.height = (parseInt(document.getElementById("gameAreaHeight").value) + 2) * parseInt(this.value) + "px";
-                    });
-                </script>
+                <td><input type="number" id="cellLength" value="48" onchange="resetGameArea()"></td>
+            </tr>
+            <tr>
+                <td style="text-align: right;"><label for="cellMargin">格子间距（px）：</label></td>
+                <td><input type="number" id="cellMargin" value="2" onchange="resetGameArea()"></td>
             </tr>
             <tr>
                 <td style="text-align: right;"><label for="gameAreaWidth">宽度（格）：</label></td>
-                <td><input type="number" id="gameAreaWidth" value="10"></td>
-                <script>
-                    // 设置游戏区域宽度
-                    document.getElementById("gameAreaWidth").addEventListener("change", function () {
-                        document.getElementById("gameArea").style.width = (parseInt(this.value) + 2) * parseInt(document.getElementById("cellLength").value) + "px";
-                    });
-                </script>
+                <td><input type="number" id="gameAreaWidth" value="10" onchange="resetGameArea()"></td>
             </tr>
             <tr>
                 <td style="text-align: right;"><label for="gameAreaHeight">高度（格）：</label></td>
-                <td><input type="number" id="gameAreaHeight" value="10"></td>
-                <script>
-                    // 设置游戏区域高度
-                    document.getElementById("gameAreaHeight").addEventListener("change", function () {
-                        document.getElementById("gameArea").style.height = (parseInt(this.value) + 2) * parseInt(document.getElementById("cellLength").value) + "px";
-                    });
-                </script>
+                <td><input type="number" id="gameAreaHeight" value="10" onchange="resetGameArea()"></td>
             </tr>
         </table>
         <button id="start">开始游戏</button>
@@ -108,6 +95,72 @@
 </div>
 </body>
 <script>
+    // 重新设置游戏区域
+    function resetGameArea() {
+        let cellLength = Number(document.getElementById("cellLength").value);
+        let gameAreaWidth = Number(document.getElementById("gameAreaWidth").value);
+        let gameAreaHeight = Number(document.getElementById("gameAreaHeight").value);
+        let gameArea = document.getElementById("gameArea");
+        // 清空原有内容
+        gameArea.innerHTML = "";
+        // 填充格子
+        let table = document.createElement("table");
+        table.style.borderSpacing = document.getElementById("cellMargin").value + "px";
+        for (let i = 0; i < gameAreaHeight + 2; i++) {
+            let row = document.createElement("tr");
+            for (let j = 0; j < gameAreaWidth + 2; j++) {
+                let cell = document.createElement("td");
+                cell.id = "cell-" + i + "-" + j;
+                cell.style.width = cellLength + "px";
+                cell.style.height = cellLength + "px";
+                cell.style.padding = "0";
+                // 背景设置为棋盘色
+                if (i % 2 === 0 && j % 2 === 0 || i % 2 === 1 && j % 2 === 1) {
+                    cell.style.backgroundColor = "#eee";
+                } else {
+                    cell.style.backgroundColor = "#ddd";
+                }
+                // 设置边界墙面
+                if (i === 0 || i === gameAreaHeight + 1 || j === 0 || j === gameAreaWidth + 1) {
+                    drawCanvas(cell, "wall");
+                }
+                row.appendChild(cell);
+            }
+            table.appendChild(row);
+        }
+        gameArea.appendChild(table);
+    }
 
+    resetGameArea(); // 载入页面后立即初始化游戏区域一次
+
+    // 适配高清屏
+    function createHDCanvas(canvas, w, h) {
+        let ratio = window.devicePixelRatio || 1;
+        canvas.width = w * ratio; // 实际渲染像素
+        canvas.height = h * ratio; // 实际渲染像素
+        canvas.style.width = `${w}px`; // 控制显示大小
+        canvas.style.height = `${h}px`; // 控制显示大小
+        return canvas;
+    }
+
+    // canvas绘制
+    function drawCanvas(cell, type, rotation) {
+        let ratio = window.devicePixelRatio || 1;
+        let cellLength = Number(document.getElementById("cellLength").value);
+        let canvas = document.createElement("canvas");
+        canvas.style.display = "block";
+        canvas.style.padding = "0";
+        canvas.style.margin = "0";
+        canvas = createHDCanvas(canvas, cellLength, cellLength);
+        let ctx = canvas.getContext("2d");
+        ctx.scale(ratio, ratio); // 高清屏适配
+        if (type === "wall") {
+            ctx.fillStyle = "#ff7a23";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        }
+
+        cell.appendChild(canvas);
+    }
 </script>
 </html>

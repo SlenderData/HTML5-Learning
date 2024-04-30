@@ -73,11 +73,11 @@
             </tr>
             <tr>
                 <td style="text-align: right;"><label for="cellLength">格子边长（px）：</label></td>
-                <td><input type="number" id="cellLength" value="48" onchange="resetGameArea()"></td>
+                <td><input type="number" id="cellLength" value="64" onchange="resetGameArea()"></td>
             </tr>
             <tr>
                 <td style="text-align: right;"><label for="cellMargin">格子间距（px）：</label></td>
-                <td><input type="number" id="cellMargin" value="2" onchange="resetGameArea()"></td>
+                <td><input type="number" id="cellMargin" value="0" onchange="resetGameArea()"></td>
             </tr>
             <tr>
                 <td style="text-align: right;"><label for="gameAreaWidth">宽度（格）：</label></td>
@@ -122,7 +122,23 @@
                 }
                 // 设置边界墙面
                 if (i === 0 || i === gameAreaHeight + 1 || j === 0 || j === gameAreaWidth + 1) {
-                    drawCanvas(cell, "wall");
+                    if (i === 0 && j === 0) {
+                        drawCanvas(cell, "WallCorner", 270);
+                    } else if (i === 0 && j === gameAreaWidth + 1) {
+                        drawCanvas(cell, "WallCorner", 0);
+                    } else if (i === gameAreaHeight + 1 && j === 0) {
+                        drawCanvas(cell, "WallCorner", 180);
+                    } else if (i === gameAreaHeight + 1 && j === gameAreaWidth + 1) {
+                        drawCanvas(cell, "WallCorner", 90);
+                    } else if (i === 0) {
+                        drawCanvas(cell, "Wall", 0);
+                    } else if (j === 0) {
+                        drawCanvas(cell, "Wall", 270);
+                    } else if (j === gameAreaWidth + 1) {
+                        drawCanvas(cell, "Wall", 90);
+                    } else if (i === gameAreaHeight + 1) {
+                        drawCanvas(cell, "Wall", 180);
+                    }
                 }
                 row.appendChild(cell);
             }
@@ -134,12 +150,11 @@
     resetGameArea(); // 载入页面后立即初始化游戏区域一次
 
     // 适配高清屏
-    function createHDCanvas(canvas, w, h) {
-        let ratio = window.devicePixelRatio || 1;
-        canvas.width = w * ratio; // 实际渲染像素
-        canvas.height = h * ratio; // 实际渲染像素
-        canvas.style.width = `${w}px`; // 控制显示大小
-        canvas.style.height = `${h}px`; // 控制显示大小
+    function createHDCanvas(canvas, l, ratio) {
+        canvas.width = l * ratio; // 实际渲染像素
+        canvas.height = l * ratio; // 实际渲染像素
+        canvas.style.width = `${l}px`; // 控制显示大小
+        canvas.style.height = `${l}px`; // 控制显示大小
         return canvas;
     }
 
@@ -151,15 +166,49 @@
         canvas.style.display = "block";
         canvas.style.padding = "0";
         canvas.style.margin = "0";
-        canvas = createHDCanvas(canvas, cellLength, cellLength);
+        canvas = createHDCanvas(canvas, cellLength, ratio);
         let ctx = canvas.getContext("2d");
-        ctx.scale(ratio, ratio); // 高清屏适配
-        if (type === "wall") {
-            ctx.fillStyle = "#ff7a23";
+        let pl = cellLength * ratio / 16;  // PixelLength 标准像素长度
+        // 绘制墙面
+        if (type === "Wall") {
+            // 填充背景
+            ctx.fillStyle = "#45283C";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+            // 绘制砖块
+            ctx.fillStyle = "#8F563B";
+            ctx.fillRect(0, pl, 4 * pl, 3 * pl);
+            ctx.fillRect(5 * pl, pl, 7 * pl, 3 * pl);
+            ctx.fillRect(13 * pl, pl, 3 * pl, 3 * pl);
+            ctx.fillRect(pl, 5 * pl, 7 * pl, 3 * pl);
+            ctx.fillRect(9 * pl, 5 * pl, 7 * pl, 3 * pl);
+            ctx.fillRect(0, 9 * pl, 4 * pl, 3 * pl);
+            ctx.fillRect(5 * pl, 9 * pl, 7 * pl, 3 * pl);
+            ctx.fillRect(13 * pl, 9 * pl, 3 * pl, 3 * pl);
+            ctx.fillRect(pl, 13 * pl, 7 * pl, 3 * pl);
+            ctx.fillRect(9 * pl, 13 * pl, 7 * pl, 3 * pl);
+        }
+        // 绘制墙角
+        if (type === "WallCorner") {
+            // 填充背景
+            ctx.fillStyle = "#45283C";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // 绘制砖块
+            ctx.fillStyle = "#8F563B";
+            ctx.fillRect(0, pl, 4 * pl, 3 * pl);
+            ctx.fillRect(5 * pl, pl, 7 * pl, 3 * pl);
+            ctx.fillRect(13 * pl, pl, 2 * pl, 3 * pl);
+            ctx.fillRect(12 * pl, 5 * pl, 3 * pl, 7 * pl);
+            ctx.fillRect(12 * pl, 13 * pl, 3 * pl, 3 * pl);
+            ctx.fillRect(pl, 5 * pl, 7 * pl, 3 * pl);
+            ctx.fillRect(9 * pl, 5 * pl, 2 * pl, 3 * pl);
+            ctx.fillRect(8 * pl, 9 * pl, 3 * pl, 7 * pl);
+            ctx.fillRect(0, 9 * pl, 4 * pl, 3 * pl);
+            ctx.fillRect(5 * pl, 9 * pl, 2 * pl, 3 * pl);
+            ctx.fillRect(4 * pl, 13 * pl, 3 * pl, 3 * pl);
+            ctx.fillRect(pl, 13 * pl, 2 * pl, 3 * pl);
         }
 
+        canvas.style.transform = `rotate(${rotation}deg)`;  // 旋转
         cell.appendChild(canvas);
     }
 </script>

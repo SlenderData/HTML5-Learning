@@ -139,6 +139,8 @@
                     } else if (i === gameAreaHeight + 1) {
                         drawCanvas(cell, "Wall", 180);
                     }
+                } else if (i === 1 && j === 1) {
+                    // drawCanvas(cell, "SnakeBodyBend", 0);//测试
                 }
                 row.appendChild(cell);
             }
@@ -160,6 +162,7 @@
 
     // canvas绘制
     function drawCanvas(cell, type, rotation) {
+        cell.innerHTML = "";  // 清除原有内容
         let ratio = window.devicePixelRatio || 1;
         let cellLength = Number(document.getElementById("cellLength").value);
         let canvas = document.createElement("canvas");
@@ -169,43 +172,143 @@
         canvas = createHDCanvas(canvas, cellLength, ratio);
         let ctx = canvas.getContext("2d");
         let pl = cellLength * ratio / 16;  // PixelLength 标准像素长度
+        function PL(n) {
+            return n * pl;
+        }
+
         // 绘制墙面
         if (type === "Wall") {
             // 填充背景
             ctx.fillStyle = "#45283C";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillRect(PL(0), PL(0), PL(16), PL(16));
             // 绘制砖块
             ctx.fillStyle = "#8F563B";
-            ctx.fillRect(0, pl, 4 * pl, 3 * pl);
-            ctx.fillRect(5 * pl, pl, 7 * pl, 3 * pl);
-            ctx.fillRect(13 * pl, pl, 3 * pl, 3 * pl);
-            ctx.fillRect(pl, 5 * pl, 7 * pl, 3 * pl);
-            ctx.fillRect(9 * pl, 5 * pl, 7 * pl, 3 * pl);
-            ctx.fillRect(0, 9 * pl, 4 * pl, 3 * pl);
-            ctx.fillRect(5 * pl, 9 * pl, 7 * pl, 3 * pl);
-            ctx.fillRect(13 * pl, 9 * pl, 3 * pl, 3 * pl);
-            ctx.fillRect(pl, 13 * pl, 7 * pl, 3 * pl);
-            ctx.fillRect(9 * pl, 13 * pl, 7 * pl, 3 * pl);
+            ctx.fillRect(PL(0), PL(1), PL(4), PL(3));
+            ctx.fillRect(PL(5), PL(1), PL(7), PL(3));
+            ctx.fillRect(PL(13), PL(1), PL(3), PL(3));
+            ctx.fillRect(PL(1), PL(5), PL(7), PL(3));
+            ctx.fillRect(PL(9), PL(5), PL(7), PL(3));
+            ctx.fillRect(PL(0), PL(9), PL(4), PL(3));
+            ctx.fillRect(PL(5), PL(9), PL(7), PL(3));
+            ctx.fillRect(PL(13), PL(9), PL(3), PL(3));
+            ctx.fillRect(PL(1), PL(13), PL(7), PL(3));
+            ctx.fillRect(PL(9), PL(13), PL(7), PL(3));
         }
+
         // 绘制墙角
         if (type === "WallCorner") {
             // 填充背景
             ctx.fillStyle = "#45283C";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillRect(PL(0), PL(0), PL(16), PL(16));
             // 绘制砖块
             ctx.fillStyle = "#8F563B";
-            ctx.fillRect(0, pl, 4 * pl, 3 * pl);
-            ctx.fillRect(5 * pl, pl, 7 * pl, 3 * pl);
-            ctx.fillRect(13 * pl, pl, 2 * pl, 3 * pl);
-            ctx.fillRect(12 * pl, 5 * pl, 3 * pl, 7 * pl);
-            ctx.fillRect(12 * pl, 13 * pl, 3 * pl, 3 * pl);
-            ctx.fillRect(pl, 5 * pl, 7 * pl, 3 * pl);
-            ctx.fillRect(9 * pl, 5 * pl, 2 * pl, 3 * pl);
-            ctx.fillRect(8 * pl, 9 * pl, 3 * pl, 7 * pl);
-            ctx.fillRect(0, 9 * pl, 4 * pl, 3 * pl);
-            ctx.fillRect(5 * pl, 9 * pl, 2 * pl, 3 * pl);
-            ctx.fillRect(4 * pl, 13 * pl, 3 * pl, 3 * pl);
-            ctx.fillRect(pl, 13 * pl, 2 * pl, 3 * pl);
+            ctx.fillRect(PL(0), PL(1), PL(4), PL(3));
+            ctx.fillRect(PL(5), PL(1), PL(7), PL(3));
+            ctx.fillRect(PL(13), PL(1), PL(2), PL(3));
+            ctx.fillRect(PL(12), PL(5), PL(3), PL(7));
+            ctx.fillRect(PL(12), PL(13), PL(3), PL(3));
+            ctx.fillRect(PL(1), PL(5), PL(7), PL(3));
+            ctx.fillRect(PL(9), PL(5), PL(2), PL(3));
+            ctx.fillRect(PL(8), PL(9), PL(3), PL(7));
+            ctx.fillRect(PL(0), PL(9), PL(4), PL(3));
+            ctx.fillRect(PL(5), PL(9), PL(2), PL(3));
+            ctx.fillRect(PL(4), PL(13), PL(3), PL(3));
+            ctx.fillRect(PL(1), PL(13), PL(2), PL(3));
+        }
+
+        // 绘制蛇头
+        if (type === "SnakeHead") {
+            // 深色描边
+            ctx.fillStyle = "#222034";
+            ctx.fillRect(PL(5), PL(2), PL(6), PL(1));
+            ctx.fillRect(PL(4), PL(3), PL(8), PL(1));
+            ctx.fillRect(PL(3), PL(4), PL(10), PL(1));
+            ctx.fillRect(PL(2), PL(5), PL(12), PL(11));
+            ctx.fillRect(PL(1), PL(7), PL(14), PL(7));
+            ctx.fillRect(PL(0), PL(9), PL(16), PL(4));
+            // 红色部分
+            ctx.fillStyle = "#D95763";
+            ctx.fillRect(PL(7), PL(0), PL(2), PL(2));
+            // 绿色部分
+            ctx.fillStyle = "#99E550";
+            ctx.fillRect(PL(5), PL(3), PL(6), PL(1));
+            ctx.fillRect(PL(4), PL(4), PL(8), PL(1));
+            ctx.fillRect(PL(3), PL(5), PL(10), PL(11));
+            ctx.fillRect(PL(2), PL(7), PL(12), PL(7));
+            ctx.fillRect(PL(1), PL(9), PL(14), PL(4));
+            // 白色部分
+            ctx.fillStyle = "#FFFFFF";
+            ctx.fillRect(PL(4), PL(9), PL(2), PL(4));
+            ctx.fillRect(PL(3), PL(10), PL(4), PL(2));
+            ctx.fillRect(PL(10), PL(9), PL(2), PL(4));
+            ctx.fillRect(PL(9), PL(10), PL(4), PL(2));
+            // 深色细节
+            ctx.fillStyle = "#222034";
+            ctx.fillRect(PL(6), PL(5), PL(1), PL(1));
+            ctx.fillRect(PL(9), PL(5), PL(1), PL(1));
+            ctx.fillRect(PL(4), PL(10), PL(1), PL(1));
+            ctx.fillRect(PL(10), PL(10), PL(1), PL(1));
+        }
+
+        // 绘制直蛇身
+        if (type === "SnakeBodyStraight") {
+            // 深色描边
+            ctx.fillStyle = "#222034";
+            ctx.fillRect(PL(2), PL(0), PL(12), PL(1));
+            ctx.fillRect(PL(1), PL(1), PL(12), PL(2));
+            ctx.fillRect(PL(0), PL(3), PL(12), PL(2));
+            ctx.fillRect(PL(1), PL(5), PL(12), PL(2));
+            ctx.fillRect(PL(2), PL(7), PL(12), PL(2));
+            ctx.fillRect(PL(3), PL(9), PL(12), PL(2));
+            ctx.fillRect(PL(4), PL(11), PL(12), PL(2));
+            ctx.fillRect(PL(3), PL(13), PL(12), PL(2));
+            ctx.fillRect(PL(2), PL(15), PL(12), PL(1));
+            // 绿色部分
+            ctx.fillStyle = "#99E550";
+            ctx.fillRect(PL(3), PL(0), PL(10), PL(1));
+            ctx.fillRect(PL(2), PL(1), PL(10), PL(2));
+            ctx.fillRect(PL(1), PL(3), PL(10), PL(2));
+            ctx.fillRect(PL(2), PL(5), PL(10), PL(2));
+            ctx.fillRect(PL(3), PL(7), PL(10), PL(2));
+            ctx.fillRect(PL(4), PL(9), PL(10), PL(2));
+            ctx.fillRect(PL(5), PL(11), PL(10), PL(2));
+            ctx.fillRect(PL(4), PL(13), PL(10), PL(2));
+            ctx.fillRect(PL(3), PL(15), PL(10), PL(1));
+        }
+
+        // 绘制弯蛇身
+        if (type === "SnakeBodyBend") {
+            // 深色描边
+            ctx.fillStyle = "#222034";
+            ctx.fillRect(PL(0), PL(2), PL(1), PL(1));
+            ctx.fillRect(PL(1), PL(1), PL(3), PL(1));
+            ctx.fillRect(PL(4), PL(0), PL(4), PL(1));
+            ctx.fillRect(PL(8), PL(1), PL(3), PL(1));
+            ctx.fillRect(PL(11), PL(2), PL(2), PL(1));
+            ctx.fillRect(PL(13), PL(3), PL(1), PL(2));
+            ctx.fillRect(PL(14), PL(5), PL(1), PL(3));
+            ctx.fillRect(PL(15), PL(8), PL(1), PL(4));
+            ctx.fillRect(PL(14), PL(12), PL(1), PL(3));
+            ctx.fillRect(PL(13), PL(15), PL(1), PL(1));
+            ctx.fillRect(PL(0), PL(13), PL(1), PL(1));
+            ctx.fillRect(PL(1), PL(12), PL(2), PL(1));
+            ctx.fillRect(PL(3), PL(13), PL(1), PL(2));
+            ctx.fillRect(PL(2), PL(15), PL(1), PL(1));
+            // 绿色部分
+            ctx.fillStyle = "#99E550";
+            ctx.fillRect(PL(4), PL(1), PL(4), PL(1));
+            ctx.fillRect(PL(1), PL(2), PL(10), PL(1));
+            ctx.fillRect(PL(0), PL(3), PL(13), PL(2));
+            ctx.fillRect(PL(0), PL(5), PL(14), PL(3));
+            ctx.fillRect(PL(0), PL(8), PL(15), PL(4));
+            ctx.fillRect(PL(0), PL(12), PL(1), PL(1));
+            ctx.fillRect(PL(3), PL(12), PL(11), PL(1));
+            ctx.fillRect(PL(4), PL(13), PL(10), PL(2));
+            ctx.fillRect(PL(3), PL(15), PL(10), PL(1));
+        }
+
+        // 绘制蛇尾
+        if (type === "SnakeTail") {
         }
 
         canvas.style.transform = `rotate(${rotation}deg)`;  // 旋转

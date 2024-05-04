@@ -139,8 +139,6 @@
                     } else if (i === gameAreaHeight + 1) {
                         drawCanvas(cell, "Wall", 180);
                     }
-                } else if (i === 1 && j === 1) {
-                    // drawCanvas(cell, "SnakeBodyBend", 0);//测试
                 }
                 row.appendChild(cell);
             }
@@ -175,7 +173,6 @@
         function PL(n) {
             return n * pl;
         }
-
         // 绘制墙面
         if (type === "Wall") {
             // 填充背景
@@ -194,7 +191,6 @@
             ctx.fillRect(PL(1), PL(13), PL(7), PL(3));
             ctx.fillRect(PL(9), PL(13), PL(7), PL(3));
         }
-
         // 绘制墙角
         if (type === "WallCorner") {
             // 填充背景
@@ -215,7 +211,6 @@
             ctx.fillRect(PL(4), PL(13), PL(3), PL(3));
             ctx.fillRect(PL(1), PL(13), PL(2), PL(3));
         }
-
         // 绘制蛇头
         if (type === "SnakeHead") {
             // 深色描边
@@ -249,7 +244,6 @@
             ctx.fillRect(PL(4), PL(10), PL(1), PL(1));
             ctx.fillRect(PL(10), PL(10), PL(1), PL(1));
         }
-
         // 绘制直蛇身
         if (type === "SnakeBodyStraight") {
             // 深色描边
@@ -275,7 +269,6 @@
             ctx.fillRect(PL(4), PL(13), PL(10), PL(2));
             ctx.fillRect(PL(3), PL(15), PL(10), PL(1));
         }
-
         // 绘制弯蛇身
         if (type === "SnakeBodyBend") {
             // 深色描边
@@ -306,11 +299,37 @@
             ctx.fillRect(PL(4), PL(13), PL(10), PL(2));
             ctx.fillRect(PL(3), PL(15), PL(10), PL(1));
         }
-
         // 绘制蛇尾
         if (type === "SnakeTail") {
+            // 深色描边
+            ctx.fillStyle = "#222034";
+            ctx.fillRect(PL(2), PL(0), PL(1), PL(2));
+            ctx.fillRect(PL(1), PL(2), PL(1), PL(4));
+            ctx.fillRect(PL(2), PL(6), PL(1), PL(3));
+            ctx.fillRect(PL(3), PL(9), PL(1), PL(2));
+            ctx.fillRect(PL(4), PL(11), PL(1), PL(1));
+            ctx.fillRect(PL(5), PL(12), PL(1), PL(1));
+            ctx.fillRect(PL(6), PL(13), PL(1), PL(2));
+            ctx.fillRect(PL(7), PL(15), PL(1), PL(1));
+            ctx.fillRect(PL(8), PL(10), PL(1), PL(5));
+            ctx.fillRect(PL(9), PL(6), PL(1), PL(4));
+            ctx.fillRect(PL(10), PL(3), PL(1), PL(3));
+            ctx.fillRect(PL(11), PL(2), PL(1), PL(1));
+            ctx.fillRect(PL(12), PL(1), PL(1), PL(1));
+            ctx.fillRect(PL(13), PL(0), PL(1), PL(1));
+            // 绿色部分
+            ctx.fillStyle = "#99E550";
+            ctx.fillRect(PL(3), PL(0), PL(10), PL(1));
+            ctx.fillRect(PL(3), PL(1), PL(9), PL(1));
+            ctx.fillRect(PL(2), PL(2), PL(9), PL(1));
+            ctx.fillRect(PL(2), PL(3), PL(8), PL(3));
+            ctx.fillRect(PL(3), PL(6), PL(6), PL(3));
+            ctx.fillRect(PL(4), PL(9), PL(5), PL(1));
+            ctx.fillRect(PL(4), PL(10), PL(4), PL(1));
+            ctx.fillRect(PL(5), PL(11), PL(3), PL(1));
+            ctx.fillRect(PL(6), PL(12), PL(2), PL(1));
+            ctx.fillRect(PL(7), PL(13), PL(1), PL(2));
         }
-
         canvas.style.transform = `rotate(${rotation}deg)`;  // 旋转
         cell.appendChild(canvas);
     }

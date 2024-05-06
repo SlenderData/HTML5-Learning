@@ -88,7 +88,7 @@
                 <td><input type="number" id="gameAreaHeight" value="10" onchange="resetGameArea()"></td>
             </tr>
         </table>
-        <button id="start">开始游戏</button>
+        <button id="start" onclick="startGame()">开始游戏</button>
     </div>
     <div id="gameArea">
     </div>
@@ -173,6 +173,7 @@
         function PL(n) {
             return n * pl;
         }
+
         // 绘制墙面
         if (type === "Wall") {
             // 填充背景
@@ -332,6 +333,17 @@
         }
         canvas.style.transform = `rotate(${rotation}deg)`;  // 旋转
         cell.appendChild(canvas);
+    }
+
+    // 开始游戏
+    function startGame() {
+        // 禁止修改游戏区域设置
+        document.getElementById("speed").disabled = true;
+        document.getElementById("cellLength").disabled = true;
+        document.getElementById("cellMargin").disabled = true;
+        document.getElementById("gameAreaWidth").disabled = true;
+        document.getElementById("gameAreaHeight").disabled = true;
+
     }
 </script>
 </html>

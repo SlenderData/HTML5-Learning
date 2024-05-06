@@ -69,23 +69,28 @@
         <table>
             <tr>
                 <td style="text-align: right;"><label for="speed">刷新速度（ms）：</label></td>
-                <td><input type="number" id="speed" value="800"></td>
+                <td><input type="number" id="speed" value="800" min="1"
+                           oninput="this.value = this.value.replace(/[^\d]/g, '')"></td>
             </tr>
             <tr>
                 <td style="text-align: right;"><label for="cellLength">格子边长（px）：</label></td>
-                <td><input type="number" id="cellLength" value="64" onchange="resetGameArea()"></td>
+                <td><input type="number" id="cellLength" value="64" min="1"
+                           oninput="this.value = this.value.replace(/[^\d]/g, '')" onchange="resetGameArea()"></td>
             </tr>
             <tr>
                 <td style="text-align: right;"><label for="cellMargin">格子间距（px）：</label></td>
-                <td><input type="number" id="cellMargin" value="0" onchange="resetGameArea()"></td>
+                <td><input type="number" id="cellMargin" value="0" min="0"
+                           oninput="this.value = this.value.replace(/[^\d]/g, '')" onchange="resetGameArea()"></td>
             </tr>
             <tr>
                 <td style="text-align: right;"><label for="gameAreaWidth">宽度（格）：</label></td>
-                <td><input type="number" id="gameAreaWidth" value="10" onchange="resetGameArea()"></td>
+                <td><input type="number" id="gameAreaWidth" value="10" min="3"
+                           oninput="this.value = this.value.replace(/[^\d]/g, '')" onchange="resetGameArea()"></td>
             </tr>
             <tr>
                 <td style="text-align: right;"><label for="gameAreaHeight">高度（格）：</label></td>
-                <td><input type="number" id="gameAreaHeight" value="10" onchange="resetGameArea()"></td>
+                <td><input type="number" id="gameAreaHeight" value="10" min="3"
+                           oninput="this.value = this.value.replace(/[^\d]/g, '')" onchange="resetGameArea()"></td>
             </tr>
         </table>
         <button id="start" onclick="startGame()">开始游戏</button>
@@ -101,6 +106,16 @@
         let gameAreaWidth = Number(document.getElementById("gameAreaWidth").value);
         let gameAreaHeight = Number(document.getElementById("gameAreaHeight").value);
         let gameArea = document.getElementById("gameArea");
+        // 输入校验
+        if (gameAreaWidth < 3) {
+            alert("宽度和高度必须大于等于3！");
+            document.getElementById("gameAreaWidth").value = 3;
+            gameAreaWidth = 3;
+        } else if (gameAreaHeight < 3) {
+            alert("宽度和高度必须大于等于3！");
+            document.getElementById("gameAreaHeight").value = 3;
+            gameAreaHeight = 3;
+        }
         // 清空原有内容
         gameArea.innerHTML = "";
         // 填充格子
@@ -139,6 +154,8 @@
                     } else if (i === gameAreaHeight + 1) {
                         drawCanvas(cell, "Wall", 180);
                     }
+                } else if (i === 1 && j === 1) {
+                    drawCanvas(cell, "Food", 0); //测试
                 }
                 row.appendChild(cell);
             }
@@ -163,6 +180,19 @@
         cell.innerHTML = "";  // 清除原有内容
         let ratio = window.devicePixelRatio || 1;
         let cellLength = Number(document.getElementById("cellLength").value);
+        if (type === "Food") {  // 食物不需要绘制，直接使用 emoji
+            let div = document.createElement("div");
+            div.style.width = cellLength + "px";
+            div.style.height = cellLength + "px";
+            div.style.fontSize = cellLength * 0.5 + "px";
+            div.style.lineHeight = cellLength + "px";
+            div.style.textAlign = "center";
+            div.style.margin = 0;
+            div.style.padding = 0;
+            div.innerHTML = "🐭";
+            cell.appendChild(div);
+            return;
+        }
         let canvas = document.createElement("canvas");
         canvas.style.display = "block";
         canvas.style.padding = "0";
@@ -343,7 +373,7 @@
         document.getElementById("cellMargin").disabled = true;
         document.getElementById("gameAreaWidth").disabled = true;
         document.getElementById("gameAreaHeight").disabled = true;
-
+        // 创建
     }
 </script>
 </html>

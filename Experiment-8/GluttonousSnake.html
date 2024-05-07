@@ -171,11 +171,38 @@
         }
 
         display() {
-            while (this.head !== null) {
+            let gameAreaWidth = Number(document.getElementById("gameAreaWidth").value);
+            let gameAreaHeight = Number(document.getElementById("gameAreaHeight").value);
+            do {
                 console.log(this.head.type, this.head.row, this.head.col);
-                drawCanvas(document.getElementById("cell-" + this.head.row + "-" + this.head.col), this.head.type, 0);
+                if (this.head.row === 0 && this.head.prev.row === this.head.row && this.head.next.row === this.head.row) {
+                    drawCanvas(document.getElementById("cell-" + this.head.row + "-" + this.head.col), "Wall", 0);
+                } else if (this.head.col === 0 && this.head.prev.col === this.head.col && this.head.next.col === this.head.col) {
+                    drawCanvas(document.getElementById("cell-" + this.head.row + "-" + this.head.col), "Wall", 270);
+                } else if (this.head.row === gameAreaHeight + 1 && this.head.prev.row === this.head.row && this.head.next.row === this.head.row) {
+                    drawCanvas(document.getElementById("cell-" + this.head.row + "-" + this.head.col), "Wall", 180);
+                } else if (this.head.col === gameAreaWidth + 1 && this.head.prev.col === this.head.col && this.head.next.col === this.head.col) {
+                    drawCanvas(document.getElementById("cell-" + this.head.row + "-" + this.head.col), "Wall", 90);
+                } else if (this.head.row === 0 && this.head.col === 0) {
+                    drawCanvas(document.getElementById("cell-" + this.head.row + "-" + this.head.col), "WallCorner", 270);
+                } else if (this.head.row === 0 && this.head.col === gameAreaWidth + 1) {
+                    drawCanvas(document.getElementById("cell-" + this.head.row + "-" + this.head.col), "WallCorner", 0);
+                } else if (this.head.row === gameAreaHeight + 1 && this.head.col === 0) {
+                    drawCanvas(document.getElementById("cell-" + this.head.row + "-" + this.head.col), "WallCorner", 180);
+                } else if (this.head.row === gameAreaHeight + 1 && this.head.col === gameAreaWidth + 1) {
+                    drawCanvas(document.getElementById("cell-" + this.head.row + "-" + this.head.col), "WallCorner", 90);
+                }
                 this.head = this.head.next;
-            }
+            } while (this.head !== this.tail)
+        }
+    }
+
+    class SnakeList extends DoublyLinkedList {
+        constructor() {
+            super();
+        }
+
+        display() {
         }
     }
 
@@ -214,39 +241,32 @@
                 } else {
                     cell.style.backgroundColor = "#ddd";
                 }
-                // // 设置边界墙面
-                // if (i === 0 || i === gameAreaHeight + 1 || j === 0 || j === gameAreaWidth + 1) {
-                //     if (i === 0 && j === 0) {
-                //         drawCanvas(cell, "WallCorner", 270);
-                //     } else if (i === 0 && j === gameAreaWidth + 1) {
-                //         drawCanvas(cell, "WallCorner", 0);
-                //     } else if (i === gameAreaHeight + 1 && j === 0) {
-                //         drawCanvas(cell, "WallCorner", 180);
-                //     } else if (i === gameAreaHeight + 1 && j === gameAreaWidth + 1) {
-                //         drawCanvas(cell, "WallCorner", 90);
-                //     } else if (i === 0) {
-                //         drawCanvas(cell, "Wall", 0);
-                //     } else if (j === 0) {
-                //         drawCanvas(cell, "Wall", 270);
-                //     } else if (j === gameAreaWidth + 1) {
-                //         drawCanvas(cell, "Wall", 90);
-                //     } else if (i === gameAreaHeight + 1) {
-                //         drawCanvas(cell, "Wall", 180);
-                //     }
-                // } else if (i === 2 && j === 2) {
-                //     drawCanvas(cell, "Food", 0); //测试
-                // }
                 row.appendChild(cell);
             }
             table.appendChild(row);
         }
         gameArea.appendChild(table);
-        //设置墙节点及其集合，从左上角开始顺时针存储为双向环链
+        //设置墙节点，从左上角开始顺时针存储为双向环链
         let wallNodes = new WallNodes();
         for (let i = 0; i < gameAreaWidth + 2; i++) {
             let node = new Node("Wall", 0, i);
             wallNodes.append(node);
         }
+        for (let i = 1; i < gameAreaHeight + 2; i++) {
+            let node = new Node("Wall", i, gameAreaWidth + 1);
+            wallNodes.append(node);
+        }
+        for (let i = gameAreaWidth; i >= 0; i--) {
+            let node = new Node("Wall", gameAreaHeight + 1, i);
+            wallNodes.append(node);
+        }
+        for (let i = gameAreaHeight; i >= 1; i--) {
+            let node = new Node("Wall", i, 0);
+            wallNodes.append(node);
+        }
+        wallNodes.head.prev = wallNodes.tail;
+        wallNodes.tail.next = wallNodes.head;
+        wallNodes.tail = wallNodes.head;
         wallNodes.display();
     }
 

@@ -154,7 +154,7 @@
                     } else if (i === gameAreaHeight + 1) {
                         drawCanvas(cell, "Wall", 180);
                     }
-                } else if (i === 1 && j === 1) {
+                } else if (i === 2 && j === 2) {
                     drawCanvas(cell, "Food", 0); //测试
                 }
                 row.appendChild(cell);
@@ -184,12 +184,17 @@
             let div = document.createElement("div");
             div.style.width = cellLength + "px";
             div.style.height = cellLength + "px";
-            div.style.fontSize = cellLength * 0.5 + "px";
+            div.style.fontSize = cellLength * 0.8 + "px";
             div.style.lineHeight = cellLength + "px";
-            div.style.textAlign = "center";
+            div.style.display = "flex";
+            div.style.alignContent = "center";
+            div.style.justifyContent = "center";
             div.style.margin = 0;
             div.style.padding = 0;
-            div.innerHTML = "🐭";
+            let foods = ["🍎", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🍒", "🍑", "🍍", "🫐", "🍕", "🍔", "🌮", "🍰",
+                "🥞", "🥐", "🍣", "🍤", "🥓", "🥩", "🍗", "🍖", "🧋", "🥤", "🐭"];
+            div.innerHTML = foods[Math.floor(Math.random() * foods.length)];
+            div.style.transform = `rotate(${rotation}deg)`;  // 旋转
             cell.appendChild(div);
             return;
         }

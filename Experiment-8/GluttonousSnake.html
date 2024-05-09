@@ -170,30 +170,55 @@
             super();
         }
 
+        init() {
+            let gameAreaWidth = Number(document.getElementById("gameAreaWidth").value);
+            let gameAreaHeight = Number(document.getElementById("gameAreaHeight").value);
+            //设置墙节点，从左上角开始顺时针存储为双向环链
+            for (let i = 0; i < gameAreaWidth + 2; i++) {
+                let node = new Node("Wall", 0, i);
+                this.append(node);
+            }
+            for (let i = 1; i < gameAreaHeight + 2; i++) {
+                let node = new Node("Wall", i, gameAreaWidth + 1);
+                this.append(node);
+            }
+            for (let i = gameAreaWidth; i >= 0; i--) {
+                let node = new Node("Wall", gameAreaHeight + 1, i);
+                this.append(node);
+            }
+            for (let i = gameAreaHeight; i >= 1; i--) {
+                let node = new Node("Wall", i, 0);
+                this.append(node);
+            }
+            this.head.prev = this.tail;
+            this.tail.next = this.head;
+            return this;
+        }
+
         display() {
             let gameAreaWidth = Number(document.getElementById("gameAreaWidth").value);
             let gameAreaHeight = Number(document.getElementById("gameAreaHeight").value);
+            let currentNode = this.head;
             do {
-                console.log(this.head.type, this.head.row, this.head.col);
-                if (this.head.row === 0 && this.head.prev.row === this.head.row && this.head.next.row === this.head.row) {
-                    drawCanvas(document.getElementById("cell-" + this.head.row + "-" + this.head.col), "Wall", 0);
-                } else if (this.head.col === 0 && this.head.prev.col === this.head.col && this.head.next.col === this.head.col) {
-                    drawCanvas(document.getElementById("cell-" + this.head.row + "-" + this.head.col), "Wall", 270);
-                } else if (this.head.row === gameAreaHeight + 1 && this.head.prev.row === this.head.row && this.head.next.row === this.head.row) {
-                    drawCanvas(document.getElementById("cell-" + this.head.row + "-" + this.head.col), "Wall", 180);
-                } else if (this.head.col === gameAreaWidth + 1 && this.head.prev.col === this.head.col && this.head.next.col === this.head.col) {
-                    drawCanvas(document.getElementById("cell-" + this.head.row + "-" + this.head.col), "Wall", 90);
-                } else if (this.head.row === 0 && this.head.col === 0) {
-                    drawCanvas(document.getElementById("cell-" + this.head.row + "-" + this.head.col), "WallCorner", 270);
-                } else if (this.head.row === 0 && this.head.col === gameAreaWidth + 1) {
-                    drawCanvas(document.getElementById("cell-" + this.head.row + "-" + this.head.col), "WallCorner", 0);
-                } else if (this.head.row === gameAreaHeight + 1 && this.head.col === 0) {
-                    drawCanvas(document.getElementById("cell-" + this.head.row + "-" + this.head.col), "WallCorner", 180);
-                } else if (this.head.row === gameAreaHeight + 1 && this.head.col === gameAreaWidth + 1) {
-                    drawCanvas(document.getElementById("cell-" + this.head.row + "-" + this.head.col), "WallCorner", 90);
+                if (currentNode.row === 0 && currentNode.prev.row === currentNode.row && currentNode.next.row === currentNode.row) {
+                    drawCanvas(document.getElementById("cell-" + currentNode.row + "-" + currentNode.col), "Wall", 0);
+                } else if (currentNode.col === 0 && currentNode.prev.col === currentNode.col && currentNode.next.col === currentNode.col) {
+                    drawCanvas(document.getElementById("cell-" + currentNode.row + "-" + currentNode.col), "Wall", 270);
+                } else if (currentNode.row === gameAreaHeight + 1 && currentNode.prev.row === currentNode.row && currentNode.next.row === currentNode.row) {
+                    drawCanvas(document.getElementById("cell-" + currentNode.row + "-" + currentNode.col), "Wall", 180);
+                } else if (currentNode.col === gameAreaWidth + 1 && currentNode.prev.col === currentNode.col && currentNode.next.col === currentNode.col) {
+                    drawCanvas(document.getElementById("cell-" + currentNode.row + "-" + currentNode.col), "Wall", 90);
+                } else if (currentNode.row === 0 && currentNode.col === 0) {
+                    drawCanvas(document.getElementById("cell-" + currentNode.row + "-" + currentNode.col), "WallCorner", 270);
+                } else if (currentNode.row === 0 && currentNode.col === gameAreaWidth + 1) {
+                    drawCanvas(document.getElementById("cell-" + currentNode.row + "-" + currentNode.col), "WallCorner", 0);
+                } else if (currentNode.row === gameAreaHeight + 1 && currentNode.col === 0) {
+                    drawCanvas(document.getElementById("cell-" + currentNode.row + "-" + currentNode.col), "WallCorner", 180);
+                } else if (currentNode.row === gameAreaHeight + 1 && currentNode.col === gameAreaWidth + 1) {
+                    drawCanvas(document.getElementById("cell-" + currentNode.row + "-" + currentNode.col), "WallCorner", 90);
                 }
-                this.head = this.head.next;
-            } while (this.head !== this.tail)
+                currentNode = currentNode.next;
+            } while (currentNode !== this.head)
         }
     }
 
@@ -201,9 +226,28 @@
     class SnakeList extends DoublyLinkedList {
         constructor() {
             super();
+            this.headDirection = null;
+        }
+
+        init() {
+            let head = new Node("Snake", 3, 1);
+            this.append(head);
+            let body1 = new Node("Snake", 2, 1);
+            this.append(body1);
+            let body2 = new Node("Snake", 1, 1);
+            this.append(body2);
+            this.headDirection = "down";
+            return this;
         }
 
         display() {
+            let currentNode = this.head;
+            while (currentNode !== null) {
+                if (currentNode === this.head) {
+                    drawCanvas(document.getElementById("cell-" + currentNode.row + "-" + currentNode.col), "SnakeHead", 0);
+                }
+                currentNode = currentNode.next;
+            }
         }
     }
 
@@ -247,27 +291,8 @@
             table.appendChild(row);
         }
         gameArea.appendChild(table);
-        //设置墙节点，从左上角开始顺时针存储为双向环链
         let wallNodes = new WallNodes();
-        for (let i = 0; i < gameAreaWidth + 2; i++) {
-            let node = new Node("Wall", 0, i);
-            wallNodes.append(node);
-        }
-        for (let i = 1; i < gameAreaHeight + 2; i++) {
-            let node = new Node("Wall", i, gameAreaWidth + 1);
-            wallNodes.append(node);
-        }
-        for (let i = gameAreaWidth; i >= 0; i--) {
-            let node = new Node("Wall", gameAreaHeight + 1, i);
-            wallNodes.append(node);
-        }
-        for (let i = gameAreaHeight; i >= 1; i--) {
-            let node = new Node("Wall", i, 0);
-            wallNodes.append(node);
-        }
-        wallNodes.head.prev = wallNodes.tail;
-        wallNodes.tail.next = wallNodes.head;
-        wallNodes.tail = wallNodes.head;
+        wallNodes.init();
         wallNodes.display();
     }
 
@@ -485,7 +510,10 @@
         document.getElementById("cellMargin").disabled = true;
         document.getElementById("gameAreaWidth").disabled = true;
         document.getElementById("gameAreaHeight").disabled = true;
-        // 创建
+        // 创建蛇
+        let snake = new SnakeList().init();
+        snake.display();
+
     }
 </script>
 </html>

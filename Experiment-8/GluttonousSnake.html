@@ -84,12 +84,12 @@
             </tr>
             <tr>
                 <td style="text-align: right;"><label for="gameAreaWidth">宽度（格）：</label></td>
-                <td><input type="number" id="gameAreaWidth" value="10" min="3"
+                <td><input type="number" id="gameAreaWidth" value="8" min="3"
                            oninput="this.value = this.value.replace(/[^\d]/g, '')" onchange="resetGameArea()"></td>
             </tr>
             <tr>
                 <td style="text-align: right;"><label for="gameAreaHeight">高度（格）：</label></td>
-                <td><input type="number" id="gameAreaHeight" value="10" min="3"
+                <td><input type="number" id="gameAreaHeight" value="8" min="3"
                            oninput="this.value = this.value.replace(/[^\d]/g, '')" onchange="resetGameArea()"></td>
             </tr>
         </table>
@@ -164,6 +164,46 @@
 
     }
 
+    // 食物节点类
+    class FoodNode extends Node {
+        constructor() {
+            super();
+        }
+
+        init() {
+            let gameAreaWidth = Number(document.getElementById("gameAreaWidth").value);
+            let gameAreaHeight = Number(document.getElementById("gameAreaHeight").value);
+            // 检查是否存在空白格子
+            let empty = false;
+            for (let i = 1; i <= gameAreaHeight; i++) {
+                for (let j = 1; j <= gameAreaWidth; j++) {
+                    if (checkCellEmpty(i, j)) {
+                        empty = true;
+                        break;
+                    }
+                }
+                if (empty) {
+                    break;
+                }
+            }
+            if (!empty) {
+                console.log("没有空白格子了！");
+                return null;
+            }
+            // 在空白格子中随机生成食物
+            do {
+                this.row = Math.floor(Math.random() * gameAreaHeight) + 1;
+                this.col = Math.floor(Math.random() * gameAreaWidth) + 1;
+            } while (!checkCellEmpty(this.row, this.col));
+            this.type = "Food";
+            return this;
+        }
+
+        display() {
+            drawCanvas(document.getElementById("cell-" + this.row + "-" + this.col), "Food", 0);
+        }
+    }
+
     // 墙节点类
     class WallNodes extends DoublyLinkedList {
         constructor() {
@@ -200,22 +240,23 @@
             let gameAreaHeight = Number(document.getElementById("gameAreaHeight").value);
             let currentNode = this.head;
             do {
-                if (currentNode.row === 0 && currentNode.prev.row === currentNode.row && currentNode.next.row === currentNode.row) {
-                    drawCanvas(document.getElementById("cell-" + currentNode.row + "-" + currentNode.col), "Wall", 0);
-                } else if (currentNode.col === 0 && currentNode.prev.col === currentNode.col && currentNode.next.col === currentNode.col) {
-                    drawCanvas(document.getElementById("cell-" + currentNode.row + "-" + currentNode.col), "Wall", 270);
-                } else if (currentNode.row === gameAreaHeight + 1 && currentNode.prev.row === currentNode.row && currentNode.next.row === currentNode.row) {
-                    drawCanvas(document.getElementById("cell-" + currentNode.row + "-" + currentNode.col), "Wall", 180);
-                } else if (currentNode.col === gameAreaWidth + 1 && currentNode.prev.col === currentNode.col && currentNode.next.col === currentNode.col) {
-                    drawCanvas(document.getElementById("cell-" + currentNode.row + "-" + currentNode.col), "Wall", 90);
-                } else if (currentNode.row === 0 && currentNode.col === 0) {
-                    drawCanvas(document.getElementById("cell-" + currentNode.row + "-" + currentNode.col), "WallCorner", 270);
+                let cell = document.getElementById("cell-" + currentNode.row + "-" + currentNode.col);
+                if (currentNode.row === 0 && currentNode.col === 0) {
+                    drawCanvas(cell, "WallCorner", 270);
                 } else if (currentNode.row === 0 && currentNode.col === gameAreaWidth + 1) {
-                    drawCanvas(document.getElementById("cell-" + currentNode.row + "-" + currentNode.col), "WallCorner", 0);
+                    drawCanvas(cell, "WallCorner", 0);
                 } else if (currentNode.row === gameAreaHeight + 1 && currentNode.col === 0) {
-                    drawCanvas(document.getElementById("cell-" + currentNode.row + "-" + currentNode.col), "WallCorner", 180);
+                    drawCanvas(cell, "WallCorner", 180);
                 } else if (currentNode.row === gameAreaHeight + 1 && currentNode.col === gameAreaWidth + 1) {
-                    drawCanvas(document.getElementById("cell-" + currentNode.row + "-" + currentNode.col), "WallCorner", 90);
+                    drawCanvas(cell, "WallCorner", 90);
+                } else if (currentNode.row === 0) {
+                    drawCanvas(cell, "Wall", 0);
+                } else if (currentNode.col === 0) {
+                    drawCanvas(cell, "Wall", 270);
+                } else if (currentNode.row === gameAreaHeight + 1) {
+                    drawCanvas(cell, "Wall", 180);
+                } else if (currentNode.col === gameAreaWidth + 1) {
+                    drawCanvas(cell, "Wall", 90);
                 }
                 currentNode = currentNode.next;
             } while (currentNode !== this.head)
@@ -230,12 +271,16 @@
         }
 
         init() {
-            let head = new Node("Snake", 3, 1);
-            this.append(head);
-            let body1 = new Node("Snake", 2, 1);
-            this.append(body1);
-            let body2 = new Node("Snake", 1, 1);
-            this.append(body2);
+            let body = new Node("Snake", 3, 1);
+            this.append(body);
+            body = new Node("Snake", 2, 1);
+            this.append(body);
+            body = new Node("Snake", 1, 1);
+            this.append(body);
+            body = new Node("Snake", 1, 2);
+            this.append(body);
+            body = new Node("Snake", 2, 2);
+            this.append(body);
             this.headDirection = "down";
             return this;
         }
@@ -243,11 +288,90 @@
         display() {
             let currentNode = this.head;
             while (currentNode !== null) {
+                let cell = document.getElementById("cell-" + currentNode.row + "-" + currentNode.col);
+                let prevNode = currentNode.prev;
+                let nextNode = currentNode.next;
                 if (currentNode === this.head) {
-                    drawCanvas(document.getElementById("cell-" + currentNode.row + "-" + currentNode.col), "SnakeHead", 0);
+                    if (currentNode.row === nextNode.row) {
+                        if (currentNode.col < nextNode.col) {
+                            drawCanvas(cell, "SnakeHead", 270);
+                        } else {
+                            drawCanvas(cell, "SnakeHead", 90);
+                        }
+                    } else {
+                        if (currentNode.row < nextNode.row) {
+                            drawCanvas(cell, "SnakeHead", 0);
+                        } else {
+                            drawCanvas(cell, "SnakeHead", 180);
+                        }
+                    }
+                } else if (currentNode === this.tail) {
+                    if (currentNode.row === prevNode.row) {
+                        if (currentNode.col > prevNode.col) {
+                            drawCanvas(cell, "SnakeTail", 270);
+                        } else {
+                            drawCanvas(cell, "SnakeTail", 90);
+                        }
+                    } else {
+                        if (currentNode.row > prevNode.row) {
+                            drawCanvas(cell, "SnakeTail", 0);
+                        } else {
+                            drawCanvas(cell, "SnakeTail", 180);
+                        }
+                    }
+                } else {
+                    if (currentNode.row === prevNode.row && currentNode.row === nextNode.row) {
+                        if (currentNode.col > prevNode.col) {
+                            drawCanvas(cell, "SnakeBodyStraight", 270);
+                        } else {
+                            drawCanvas(cell, "SnakeBodyStraight", 90);
+                        }
+                    } else if (currentNode.col === prevNode.col && currentNode.col === nextNode.col) {
+                        if (currentNode.row < nextNode.row) {
+                            drawCanvas(cell, "SnakeBodyStraight", 0);
+                        } else {
+                            drawCanvas(cell, "SnakeBodyStraight", 180);
+                        }
+                    } else {
+                        drawCanvas(cell, "SnakeBodyBend", 0);
+                        let canvas = cell.children[0];
+                        if (currentNode.row === prevNode.row) {
+                            if (currentNode.col > prevNode.col) {
+                                if (currentNode.row < nextNode.row) {
+                                    canvas.style.transform = "rotate(0deg) rotateX(0deg)";
+                                } else {
+                                    canvas.style.transform = "rotate(0deg) rotateX(180deg)";
+                                }
+                            } else {
+                                if (currentNode.row > nextNode.row) {
+                                    canvas.style.transform = "rotate(180deg) rotateX(0deg)";
+                                } else {
+                                    canvas.style.transform = "rotate(180deg) rotateX(180deg)";
+                                }
+                            }
+                        } else if (currentNode.col === prevNode.col) {
+                            if (currentNode.row > prevNode.row) {
+                                if (currentNode.col > nextNode.col) {
+                                    canvas.style.transform = "rotate(90deg) rotateX(0deg)";
+                                } else {
+                                    canvas.style.transform = "rotate(90deg) rotateX(180deg)";
+                                }
+                            } else {
+                                if (currentNode.col < nextNode.col) {
+                                    canvas.style.transform = "rotate(270deg) rotateX(0deg)";
+                                } else {
+                                    canvas.style.transform = "rotate(270deg) rotateX(180deg)";
+                                }
+                            }
+                        }
+                    }
                 }
                 currentNode = currentNode.next;
             }
+        }
+
+        move() {
+
         }
     }
 
@@ -291,12 +415,23 @@
             table.appendChild(row);
         }
         gameArea.appendChild(table);
+        // 绘制墙
         let wallNodes = new WallNodes();
         wallNodes.init();
         wallNodes.display();
     }
 
     resetGameArea(); // 载入页面后立即初始化游戏区域一次
+
+    // 检查格子是否为空
+    function checkCellEmpty(row, col) {
+        return document.getElementById("cell-" + row + "-" + col).children.length === 0;
+    }
+
+    // 检查格子是否为食物
+    function checkCellFood(row, col) {
+        return document.getElementById("cell-" + row + "-" + col).children[0].tagName.toUpperCase() === "DIV";
+    }
 
     // 适配高清屏
     function createHDCanvas(canvas, l, ratio) {
@@ -318,6 +453,7 @@
             div.style.height = cellLength + "px";
             div.style.fontSize = cellLength * 0.8 + "px";
             div.style.lineHeight = cellLength + "px";
+            div.style.backgroundColor = "rgba(0,0,0,0)";
             div.style.display = "flex";
             div.style.alignContent = "center";
             div.style.justifyContent = "center";
@@ -392,7 +528,7 @@
             // 红色部分
             ctx.fillStyle = "#D95763";
             ctx.fillRect(PL(7), PL(0), PL(2), PL(2));
-            // 绿色部分
+            // 浅绿色部分
             ctx.fillStyle = "#99E550";
             ctx.fillRect(PL(5), PL(3), PL(6), PL(1));
             ctx.fillRect(PL(4), PL(4), PL(8), PL(1));
@@ -425,13 +561,16 @@
             ctx.fillRect(PL(4), PL(11), PL(12), PL(2));
             ctx.fillRect(PL(3), PL(13), PL(12), PL(2));
             ctx.fillRect(PL(2), PL(15), PL(12), PL(1));
-            // 绿色部分
-            ctx.fillStyle = "#99E550";
+            // 深绿色部分
+            ctx.fillStyle = "#37946E";
             ctx.fillRect(PL(3), PL(0), PL(10), PL(1));
             ctx.fillRect(PL(2), PL(1), PL(10), PL(2));
             ctx.fillRect(PL(1), PL(3), PL(10), PL(2));
             ctx.fillRect(PL(2), PL(5), PL(10), PL(2));
-            ctx.fillRect(PL(3), PL(7), PL(10), PL(2));
+            ctx.fillRect(PL(3), PL(7), PL(10), PL(1));
+            // 浅绿色部分
+            ctx.fillStyle = "#99E550";
+            ctx.fillRect(PL(3), PL(8), PL(10), PL(1));
             ctx.fillRect(PL(4), PL(9), PL(10), PL(2));
             ctx.fillRect(PL(5), PL(11), PL(10), PL(2));
             ctx.fillRect(PL(4), PL(13), PL(10), PL(2));
@@ -455,17 +594,29 @@
             ctx.fillRect(PL(1), PL(12), PL(2), PL(1));
             ctx.fillRect(PL(3), PL(13), PL(1), PL(2));
             ctx.fillRect(PL(2), PL(15), PL(1), PL(1));
-            // 绿色部分
+            // 浅绿色部分
             ctx.fillStyle = "#99E550";
-            ctx.fillRect(PL(4), PL(1), PL(4), PL(1));
-            ctx.fillRect(PL(1), PL(2), PL(10), PL(1));
             ctx.fillRect(PL(0), PL(3), PL(13), PL(2));
             ctx.fillRect(PL(0), PL(5), PL(14), PL(3));
             ctx.fillRect(PL(0), PL(8), PL(15), PL(4));
-            ctx.fillRect(PL(0), PL(12), PL(1), PL(1));
             ctx.fillRect(PL(3), PL(12), PL(11), PL(1));
             ctx.fillRect(PL(4), PL(13), PL(10), PL(2));
             ctx.fillRect(PL(3), PL(15), PL(10), PL(1));
+            // 深绿色部分
+            ctx.fillStyle = "#37946E";
+            ctx.fillRect(PL(4), PL(1), PL(4), PL(1));
+            ctx.fillRect(PL(1), PL(2), PL(10), PL(1));
+            ctx.fillRect(PL(0), PL(3), PL(13), PL(1));
+            ctx.fillRect(PL(0), PL(4), PL(12), PL(1));
+            ctx.fillRect(PL(0), PL(5), PL(11), PL(1));
+            ctx.fillRect(PL(0), PL(6), PL(10), PL(1));
+            ctx.fillRect(PL(0), PL(7), PL(9), PL(1));
+            ctx.fillRect(PL(0), PL(8), PL(8), PL(1));
+            ctx.fillRect(PL(0), PL(9), PL(7), PL(1));
+            ctx.fillRect(PL(0), PL(10), PL(6), PL(1));
+            ctx.fillRect(PL(0), PL(11), PL(5), PL(1));
+            ctx.fillRect(PL(0), PL(12), PL(1), PL(1));
+            ctx.fillRect(PL(3), PL(12), PL(1), PL(1));
         }
         // 绘制蛇尾
         if (type === "SnakeTail") {
@@ -485,8 +636,8 @@
             ctx.fillRect(PL(11), PL(2), PL(1), PL(1));
             ctx.fillRect(PL(12), PL(1), PL(1), PL(1));
             ctx.fillRect(PL(13), PL(0), PL(1), PL(1));
-            // 绿色部分
-            ctx.fillStyle = "#99E550";
+            // 深绿色部分
+            ctx.fillStyle = "#37946E";
             ctx.fillRect(PL(3), PL(0), PL(10), PL(1));
             ctx.fillRect(PL(3), PL(1), PL(9), PL(1));
             ctx.fillRect(PL(2), PL(2), PL(9), PL(1));
@@ -511,8 +662,14 @@
         document.getElementById("gameAreaWidth").disabled = true;
         document.getElementById("gameAreaHeight").disabled = true;
         // 创建蛇
-        let snake = new SnakeList().init();
+        let snake = new SnakeList();
+        snake.init();
         snake.display();
+        // 创建食物
+        let food = new FoodNode();
+        food.init();
+        food.display();
+
 
     }
 </script>

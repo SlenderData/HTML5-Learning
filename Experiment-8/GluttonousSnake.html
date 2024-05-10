@@ -370,7 +370,11 @@
             }
         }
 
-        move() {
+        move(targetDirection) {
+            let tempNode = this.pop();
+            // 清空tempNode所在的格子
+            document.getElementById("cell-" + tempNode.row + "-" + tempNode.col).innerHTML = "";
+
 
         }
     }
@@ -669,7 +673,27 @@
         let food = new FoodNode();
         food.init();
         food.display();
-
+        // 临时变量存储目标方向
+        let targetDirection = null;
+        // 键盘事件监听
+        document.onkeydown = function (event) {
+            let e = event || window.event || arguments.callee.caller.arguments[0];
+            if (e && e.keyCode === 37) {  // 左
+                targetDirection = "left";
+            }
+            if (e && e.keyCode === 38) {  // 上
+                targetDirection = "up";
+            }
+            if (e && e.keyCode === 39) {  // 右
+                targetDirection = "right";
+            }
+            if (e && e.keyCode === 40) {  // 下
+                targetDirection = "down";
+            }
+        };
+        // 蛇移动
+        snake.move(targetDirection);
+        snake.display();
 
     }
 </script>

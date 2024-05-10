@@ -69,28 +69,28 @@
         <table>
             <tr>
                 <td style="text-align: right;"><label for="speed">刷新速度（ms）：</label></td>
-                <td><input type="number" id="speed" value="800" min="1"
-                           oninput="this.value = this.value.replace(/[^\d]/g, '')"></td>
+                <td><input type="number" id="speed" value="500" min="1"
+                           oninput="this.value = this.value.replace(/\D/g, '')"></td>
             </tr>
             <tr>
                 <td style="text-align: right;"><label for="cellLength">格子边长（px）：</label></td>
                 <td><input type="number" id="cellLength" value="64" min="1"
-                           oninput="this.value = this.value.replace(/[^\d]/g, '')" onchange="resetGameArea()"></td>
+                           oninput="this.value = this.value.replace(/\D/g, '')" onchange="resetGameArea()"></td>
             </tr>
             <tr>
                 <td style="text-align: right;"><label for="cellMargin">格子间距（px）：</label></td>
                 <td><input type="number" id="cellMargin" value="0" min="0"
-                           oninput="this.value = this.value.replace(/[^\d]/g, '')" onchange="resetGameArea()"></td>
+                           oninput="this.value = this.value.replace(/\D/g, '')" onchange="resetGameArea()"></td>
             </tr>
             <tr>
                 <td style="text-align: right;"><label for="gameAreaWidth">宽度（格）：</label></td>
                 <td><input type="number" id="gameAreaWidth" value="8" min="3"
-                           oninput="this.value = this.value.replace(/[^\d]/g, '')" onchange="resetGameArea()"></td>
+                           oninput="this.value = this.value.replace(/\D/g, '')" onchange="resetGameArea()"></td>
             </tr>
             <tr>
                 <td style="text-align: right;"><label for="gameAreaHeight">高度（格）：</label></td>
                 <td><input type="number" id="gameAreaHeight" value="8" min="3"
-                           oninput="this.value = this.value.replace(/[^\d]/g, '')" onchange="resetGameArea()"></td>
+                           oninput="this.value = this.value.replace(/\D/g, '')" onchange="resetGameArea()"></td>
             </tr>
         </table>
         <button id="start" onclick="startGame()">开始游戏</button>
@@ -271,15 +271,9 @@
         }
 
         init() {
-            let body = new Node("Snake", 3, 1);
-            this.append(body);
-            body = new Node("Snake", 2, 1);
+            let body = new Node("Snake", 2, 1);
             this.append(body);
             body = new Node("Snake", 1, 1);
-            this.append(body);
-            body = new Node("Snake", 1, 2);
-            this.append(body);
-            body = new Node("Snake", 2, 2);
             this.append(body);
             this.headDirection = "down";
             return this;
@@ -374,13 +368,64 @@
             let tempNode = this.pop();
             // 清空tempNode所在的格子
             document.getElementById("cell-" + tempNode.row + "-" + tempNode.col).innerHTML = "";
-
-
+            // 根据目标方向设置新的头部方向
+            if (targetDirection === null ||
+                targetDirection === "left" && this.headDirection === "right" ||
+                targetDirection === "right" && this.headDirection === "left" ||
+                targetDirection === "up" && this.headDirection === "down" ||
+                targetDirection === "down" && this.headDirection === "up") {
+                // headDirection不变
+            } else {
+                this.headDirection = targetDirection;
+            }
+            // 根据headDirection设置新的头部位置
+            let newHead = new Node("Snake", this.head.row, this.head.col);
+            if (this.headDirection === "left") {
+                newHead.col--;
+            } else if (this.headDirection === "right") {
+                newHead.col++;
+            } else if (this.headDirection === "up") {
+                newHead.row--;
+            } else if (this.headDirection === "down") {
+                newHead.row++;
+            }
+            // 判断是否是食物
+            if (checkCellFood(newHead.row, newHead.col)) {
+                // 将食物格清空
+                document.getElementById("cell-" + newHead.row + "-" + newHead.col).innerHTML = "";
+                // 是食物，将尾部加回去
+                this.append(tempNode);
+                this.prepend(newHead);
+                console.log(this);
+                this.display();
+                // 加分
+                let score = Number(document.getElementById("score").innerText);
+                document.getElementById("score").innerText = score + 1;
+                // 重新生成食物
+                let food = new FoodNode().init();
+                food.display();
+            } else if (checkCellEmpty(newHead.row, newHead.col)) {
+                // 是空白格子，继续前进
+                this.prepend(newHead);
+                console.log(this);
+                this.display();
+            } else {
+                // 是墙或者是自己，游戏结束
+                alert("游戏结束！得分：" + document.getElementById("score").innerText);
+                // 重新设置游戏区域
+                resetGameArea();
+            }
         }
     }
 
     // 重新设置游戏区域
     function resetGameArea() {
+        // 将游戏区域设置解锁
+        document.getElementById("speed").disabled = false;
+        document.getElementById("cellLength").disabled = false;
+        document.getElementById("cellMargin").disabled = false;
+        document.getElementById("gameAreaWidth").disabled = false;
+        document.getElementById("gameAreaHeight").disabled = false;
         let cellLength = Number(document.getElementById("cellLength").value);
         let gameAreaWidth = Number(document.getElementById("gameAreaWidth").value);
         let gameAreaHeight = Number(document.getElementById("gameAreaHeight").value);
@@ -434,7 +479,11 @@
 
     // 检查格子是否为食物
     function checkCellFood(row, col) {
-        return document.getElementById("cell-" + row + "-" + col).children[0].tagName.toUpperCase() === "DIV";
+        if (document.getElementById("cell-" + row + "-" + col).children.length === 0) {
+            return false;
+        } else {
+            return document.getElementById("cell-" + row + "-" + col).firstElementChild.tagName === "DIV";
+        }
     }
 
     // 适配高清屏
@@ -674,27 +723,34 @@
         food.init();
         food.display();
         // 临时变量存储目标方向
-        let targetDirection = null;
-        // 键盘事件监听
+        let targetDirection = "down";
+        // 键盘事件监听，可以使用上下左右和wasd键控制
         document.onkeydown = function (event) {
             let e = event || window.event || arguments.callee.caller.arguments[0];
-            if (e && e.keyCode === 37) {  // 左
+            if (e && e.keyCode === 37 || e && e.keyCode === 65) { // 按左键或a键
                 targetDirection = "left";
             }
-            if (e && e.keyCode === 38) {  // 上
+            if (e && e.keyCode === 38 || e && e.keyCode === 87) { // 按上键或w键
                 targetDirection = "up";
             }
-            if (e && e.keyCode === 39) {  // 右
+            if (e && e.keyCode === 39 || e && e.keyCode === 68) { // 按右键或d键
                 targetDirection = "right";
             }
-            if (e && e.keyCode === 40) {  // 下
+            if (e && e.keyCode === 40 || e && e.keyCode === 83) { // 按下键或s键
                 targetDirection = "down";
             }
         };
-        // 蛇移动
-        snake.move(targetDirection);
-        snake.display();
-
+        // 每过设定时间移动一次
+        let speed = Number(document.getElementById("speed").value);
+        let timer = setInterval(function () {
+            snake.move(targetDirection);
+            // 游戏结束时清除定时器
+            if (!document.getElementById("speed").disabled) {
+                clearInterval(timer);
+                // 得分清零
+                document.getElementById("score").innerText = 0;
+            }
+        }, speed);
     }
 </script>
 </html>

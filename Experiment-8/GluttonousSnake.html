@@ -408,22 +408,24 @@
                 this.prepend(newHead);
                 this.display();
             } else {
+                // 将尾部加回去
+                this.append(tempNode);
+                this.display();
                 // 是墙或者是自己，游戏结束
                 alert("游戏结束！得分：" + document.getElementById("score").innerText);
-                // 重新设置游戏区域
-                resetGameArea();
+                gameStart = false;
+                // 将游戏区域设置解锁
+                document.getElementById("speed").disabled = false;
+                document.getElementById("cellLength").disabled = false;
+                document.getElementById("cellMargin").disabled = false;
+                document.getElementById("gameAreaWidth").disabled = false;
+                document.getElementById("gameAreaHeight").disabled = false;
             }
         }
     }
 
     // 重新设置游戏区域
     function resetGameArea() {
-        // 将游戏区域设置解锁
-        document.getElementById("speed").disabled = false;
-        document.getElementById("cellLength").disabled = false;
-        document.getElementById("cellMargin").disabled = false;
-        document.getElementById("gameAreaWidth").disabled = false;
-        document.getElementById("gameAreaHeight").disabled = false;
         let cellLength = Number(document.getElementById("cellLength").value);
         let gameAreaWidth = Number(document.getElementById("gameAreaWidth").value);
         let gameAreaHeight = Number(document.getElementById("gameAreaHeight").value);
@@ -704,8 +706,15 @@
         cell.appendChild(canvas);
     }
 
+    // 全局变量存储游戏开始结束状态
+    let gameStart = false;
+
     // 开始游戏
     function startGame() {
+        gameStart = true;
+        resetGameArea();
+        // 得分清零
+        document.getElementById("score").innerText = 0;
         // 禁止修改游戏区域设置
         document.getElementById("speed").disabled = true;
         document.getElementById("cellLength").disabled = true;
@@ -742,11 +751,9 @@
         let speed = Number(document.getElementById("speed").value);
         let timer = setInterval(function () {
             snake.move(targetDirection);
-            // 游戏结束时清除定时器
-            if (!document.getElementById("speed").disabled) {
+            // 游戏结束时暂停定时器
+            if (!gameStart) {
                 clearInterval(timer);
-                // 得分清零
-                document.getElementById("score").innerText = 0;
             }
         }, speed);
     }
